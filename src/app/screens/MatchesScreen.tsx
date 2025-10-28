@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
@@ -322,7 +321,6 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
 
     const fetchAndProcessData = useCallback(async (dateKey: string, abortSignal: AbortSignal) => {
         setLoading(true);
-        const currentFavorites = favorites || getLocalFavorites();
 
         try {
             const res = await fetch(`/api/football/fixtures?date=${dateKey}`, { signal: abortSignal });
@@ -352,7 +350,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
         } finally {
             if (!abortSignal.aborted) setLoading(false);
         }
-    }, [favorites, getDisplayName]);
+    }, [getDisplayName]);
 
     const updateLiveData = useCallback(async (dateKey: string, abortSignal: AbortSignal) => {
         const cachedFixtures = matchesCache.get(dateKey);
@@ -424,22 +422,22 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
       setSelectedDateKey(dateKey);
   };
   
-  const favoritedTeamIds = useMemo(() => favorites?.teams ? Object.keys(favorites.teams).map(Number) : [], [favorites]);
-  const favoritedLeagueIds = useMemo(() => favorites?.leagues ? Object.keys(favorites.leagues).map(Number) : [], [favorites]);
+  const favoritedTeamIds = useMemo(() => favorites?.teams ? Object.keys(favorites.teams).map(Number) : [], [favorites.teams]);
+  const favoritedLeagueIds = useMemo(() => favorites?.leagues ? Object.keys(favorites.leagues).map(Number) : [], [favorites.leagues]);
   const hasAnyFavorites = favoritedLeagueIds.length > 0 || favoritedTeamIds.length > 0;
   
   const allFixturesForDay = matchesCache.get(selectedDateKey) || [];
 
   const currentFixtures = useMemo(() => {
-      if (!hasAnyFavorites) {
-          return allFixturesForDay.filter(f => popularLeagueIds.has(f.league.id));
-      }
-      return allFixturesForDay.filter(f =>
-          favoritedTeamIds.includes(f.teams.home.id) ||
-          favoritedTeamIds.includes(f.teams.away.id) ||
-          favoritedLeagueIds.includes(f.league.id)
-      );
-  }, [allFixturesForDay, hasAnyFavorites, favoritedTeamIds, favoritedLeagueIds]);
+    if (!hasAnyFavorites) {
+        return allFixturesForDay.filter(f => popularLeagueIds.has(f.league.id));
+    }
+    return allFixturesForDay.filter(f =>
+        favoritedTeamIds.includes(f.teams.home.id) ||
+        favoritedTeamIds.includes(f.teams.away.id) ||
+        favoritedLeagueIds.includes(f.league.id)
+    );
+}, [allFixturesForDay, hasAnyFavorites, favoritedTeamIds, favoritedLeagueIds]);
 
     
   return (
@@ -490,9 +488,5 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
-
-    
-
-    
 
     

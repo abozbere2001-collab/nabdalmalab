@@ -705,8 +705,8 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
                 };
                 
                 const [lineupsRes, eventsRes, statsRes, homePlayersData, awayPlayersData] = await Promise.all([
-                    fetch(`/api/football/fixtures/lineups?fixture=${fixture.fixture.id}`, { signal }),
-                    fetch(`/api/football/fixtures/events?fixture=${fixture.fixture.id}`, { signal }),
+                    fetch(`/api/football/lineups?fixture=${fixture.fixture.id}`, { signal }),
+                    fetch(`/api/football/events?fixture=${fixture.fixture.id}`, { signal }),
                     fetch(`/api/football/statistics?fixture=${fixture.fixture.id}`, { signal }),
                     fetchTeamPlayers(fixture.teams.home.id, fixture.league.season),
                     fetchTeamPlayers(fixture.teams.away.id, fixture.league.season),
@@ -929,12 +929,5 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
       </div>
     );
 }
-
-    
-
-
-
-
-    
 
     
