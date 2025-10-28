@@ -47,7 +47,7 @@ import { IraqScreen } from './screens/IraqScreen';
 import { PredictionsScreen } from './screens/PredictionsScreen';
 import { doc, onSnapshot, getDocs, collection } from 'firebase/firestore';
 import type { Favorites } from '@/lib/types';
-import { getLocalFavorites, GUEST_MODE_KEY } from '@/lib/local-favorites';
+import { getLocalFavorites, setLocalFavorites, GUEST_MODE_KEY } from '@/lib/local-favorites';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OnboardingHints } from '@/components/OnboardingHints';
 
@@ -214,6 +214,16 @@ export function AppContentWrapper({ showHints, onHintsDismissed }: { showHints: 
     fetchCustomNames();
   }, [fetchCustomNames]);
   
+  const handleSetFavorites = useCallback((newFavorites: React.SetStateAction<Partial<Favorites>>) => {
+      setFavorites(prev => {
+          const updated = typeof newFavorites === 'function' ? newFavorites(prev) : newFavorites;
+          if (!user) { // Guest mode
+              setLocalFavorites(updated);
+          }
+          return updated;
+      });
+  }, [user]);
+
   useEffect(() => {
     let favsUnsub: (() => void) | null = null;
     const localFavsListener = () => {
@@ -342,7 +352,7 @@ export function AppContentWrapper({ showHints, onHintsDismissed }: { showHints: 
     goBack,
     customNames,
     favorites, // Make sure the most up-to-date favorites are passed
-    setFavorites, // Pass the setter function
+    setFavorites: handleSetFavorites, // Pass the correct setter function
     onCustomNameChange: fetchCustomNames,
   };
 
