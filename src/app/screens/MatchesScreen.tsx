@@ -187,13 +187,19 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     useEffect(() => {
         const scroller = scrollerRef.current;
         const selectedButton = selectedButtonRef.current;
-        if (scroller && selectedButton) {
-            const scrollerRect = scroller.getBoundingClientRect();
-            const buttonRect = selectedButton.getBoundingClientRect();
-            
-            const scrollOffset = buttonRect.left - scrollerRect.left - (scrollerRect.width / 2) + (buttonRect.width / 2);
-            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
-        }
+        
+        const centerOnSelected = () => {
+            if (scroller && selectedButton) {
+                const scrollerRect = scroller.getBoundingClientRect();
+                const buttonRect = selectedButton.getBoundingClientRect();
+                const scrollOffset = buttonRect.left - scrollerRect.left - (scrollerRect.width / 2) + (buttonRect.width / 2);
+                scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
+            }
+        };
+
+        // Use a small timeout to ensure the ref is attached and the DOM is ready, especially on initial load.
+        setTimeout(centerOnSelected, 100);
+
     }, [selectedDateKey]);
     
     return (
@@ -245,7 +251,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
 }
 
 // Main Screen Component
-export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorites, customNames, setFavorites, onCustomNameChange }: ScreenProps & { isVisible: boolean, favorites: Partial<Favorites>, setFavorites: React.Dispatch<React.SetStateAction<Partial<Favorites>>>, onCustomNameChange: () => Promise<void> }) {
+export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorites, customNames, setFavorites, onCustomNameChange }: ScreenProps & { isVisible: boolean, setFavorites: React.Dispatch<React.SetStateAction<Partial<Favorites>>>, onCustomNameChange: () => Promise<void> }) {
   const { user } = useAuth();
   const { db, isAdmin } = useAdmin();
   const { toast } = useToast();
@@ -476,5 +482,3 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
-
-    

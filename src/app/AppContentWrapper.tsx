@@ -45,7 +45,7 @@ import { cn } from '@/lib/utils';
 import { ManageTopScorersScreen } from './screens/ManageTopScorersScreen';
 import { IraqScreen } from './screens/IraqScreen';
 import { PredictionsScreen } from './screens/PredictionsScreen';
-import { doc, onSnapshot, getDocs, collection } from 'firebase/firestore';
+import { doc, onSnapshot, getDocs, collection, updateDoc, deleteField } from 'firebase/firestore';
 import type { Favorites } from '@/lib/types';
 import { getLocalFavorites, setLocalFavorites, GUEST_MODE_KEY } from '@/lib/local-favorites';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -214,15 +214,24 @@ export function AppContentWrapper({ showHints, onHintsDismissed }: { showHints: 
     fetchCustomNames();
   }, [fetchCustomNames]);
   
-  const handleSetFavorites = useCallback((newFavorites: React.SetStateAction<Partial<Favorites>>) => {
-      setFavorites(prev => {
-          const updated = typeof newFavorites === 'function' ? newFavorites(prev) : newFavorites;
-          if (!user) { // Guest mode
-              setLocalFavorites(updated);
+  const handleSetFavorites = useCallback((newFavoritesState: React.SetStateAction<Partial<Favorites>>) => {
+      setFavorites(prevFavorites => {
+          const newFavorites = typeof newFavoritesState === 'function' ? newFavoritesState(prevFavorites) : newFavoritesState;
+          
+          if (!user || user.isAnonymous) {
+              setLocalFavorites(newFavorites);
+          } else if (db) {
+              // This is a simplified approach. A more robust solution would diff the favorites
+              // and generate specific update/deleteField payloads.
+              const favDocRef = doc(db, 'users', user.uid, 'favorites', 'data');
+              updateDoc(favDocRef, newFavorites).catch(err => {
+                  console.error("Firestore update failed:", err);
+                  // For a more robust solution, you might want to revert the state change here.
+              });
           }
-          return updated;
+          return newFavorites;
       });
-  }, [user]);
+  }, [user, db]);
 
   useEffect(() => {
     let favsUnsub: (() => void) | null = null;
@@ -245,7 +254,7 @@ export function AppContentWrapper({ showHints, onHintsDismissed }: { showHints: 
     // Cleanup previous listeners before setting up new ones
     cleanup();
 
-    if (user && db) {
+    if (user && db && !user.isAnonymous) {
       const favDocRef = doc(db, 'users', user.uid, 'favorites', 'data');
       favsUnsub = onSnapshot(
         favDocRef,
