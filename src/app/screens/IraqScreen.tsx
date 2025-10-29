@@ -183,7 +183,7 @@ const TeamFixturesDisplay = ({ teamId, navigate }: { teamId: number; navigate: S
     );
 };
 
-export function IraqScreen({ navigate, goBack, canGoBack, favorites, setFavorites, customNames, onCustomNameChange }: ScreenProps & {setFavorites: React.Dispatch<React.SetStateAction<Partial<Favorites>>>, onCustomNameChange: () => void}) {
+export function IraqScreen({ navigate, goBack, canGoBack, favorites, setFavorites, customNames, onCustomNameChange }: ScreenProps & {setFavorites: (favorites: any) => void, onCustomNameChange?: () => void}) {
   const { user } = useAuth();
   const { db } = useFirestore();
   const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
@@ -221,25 +221,12 @@ export function IraqScreen({ navigate, goBack, canGoBack, favorites, setFavorite
 
 
  const handleRemoveCrowned = useCallback((teamIdToRemove: number) => {
-    setFavorites(prev => {
-        if (!prev) return {};
-        const newFavorites = JSON.parse(JSON.stringify(prev));
-        if (newFavorites.crownedTeams?.[teamIdToRemove]) {
-            delete newFavorites.crownedTeams[teamIdToRemove];
-        }
-
-        if (user && db && !user.isAnonymous) {
-            const favDocRef = doc(db, 'users', user.uid, 'favorites', 'data');
-            updateDoc(favDocRef, { [`crownedTeams.${teamIdToRemove}`]: deleteField() }).catch(err => {
-                errorEmitter.emit('permission-error', new FirestorePermissionError({ path: favDocRef.path, operation: 'update', requestResourceData: { [`crownedTeams.${teamIdToRemove}`]: 'DELETED' } }));
-            });
-        } else {
-            setLocalFavorites(newFavorites);
-        }
-
-        return newFavorites;
-    });
-}, [user, db, setFavorites]);
+    const newFavorites = JSON.parse(JSON.stringify(favorites || {}));
+    if (newFavorites.crownedTeams?.[teamIdToRemove]) {
+        delete newFavorites.crownedTeams[teamIdToRemove];
+    }
+    setFavorites(newFavorites);
+}, [favorites, setFavorites]);
   
   const handleSelectTeam = (teamId: number) => {
     setSelectedTeamId(teamId);

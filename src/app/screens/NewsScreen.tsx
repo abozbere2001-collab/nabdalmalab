@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -31,7 +32,7 @@ import { errorEmitter } from '@/firebase/error-emitter';
 import { SearchSheet } from '@/components/SearchSheet';
 import { ProfileButton } from '../AppContentWrapper';
 
-export function NewsScreen({ navigate, goBack, canGoBack }: ScreenProps) {
+export function NewsScreen({ navigate, goBack, canGoBack, favorites, customNames, setFavorites }: ScreenProps & {setFavorites: (favorites: any) => void}) {
   const { isAdmin } = useAdmin();
   const { db } = useFirestore();
   const [news, setNews] = useState<NewsArticle[]>([]);
@@ -86,7 +87,7 @@ export function NewsScreen({ navigate, goBack, canGoBack }: ScreenProps) {
         canGoBack={canGoBack} 
         actions={
           <div className="flex items-center gap-1">
-              <SearchSheet navigate={navigate}>
+              <SearchSheet navigate={navigate} favorites={favorites} customNames={customNames} setFavorites={setFavorites}>
                   <Button variant="ghost" size="icon">
                       <Search className="h-5 w-5" />
                   </Button>
