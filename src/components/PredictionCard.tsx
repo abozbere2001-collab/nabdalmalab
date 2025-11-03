@@ -65,18 +65,20 @@ const PredictionCard = ({
         setTimeout(() => setIsUpdating(false), 500);
       }
     };
-
-    if (isMatchLiveOrFinished && !isMatchFinished) {
-      fetchLiveFixture();
-      intervalId = setInterval(fetchLiveFixture, 60000);
-    } else {
-      if (
-        ['NS', 'TBD'].includes(predictionMatch.fixtureData.fixture.status.short) &&
-        new Date(predictionMatch.fixtureData.fixture.timestamp * 1000) < new Date()
-      ) {
+    
+    // Only fetch updates if the match has not finished yet.
+    if (!isMatchFinished) {
+      // If it's a live match, fetch periodically
+      if (isMatchLiveOrFinished) {
+        fetchLiveFixture();
+        intervalId = setInterval(fetchLiveFixture, 60000);
+      } 
+      // If it's a future match that has just started, fetch once.
+      else if (['NS', 'TBD'].includes(predictionMatch.fixtureData.fixture.status.short) && new Date(predictionMatch.fixtureData.fixture.timestamp * 1000) < new Date()) {
         fetchLiveFixture();
       }
     }
+
 
     return () => {
       if (intervalId) clearInterval(intervalId);
