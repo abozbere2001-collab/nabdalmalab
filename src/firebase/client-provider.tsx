@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
+import React, { useState, useEffect, useMemo, type ReactNode } from 'react';
 import { initializeApp, getApps, getApp, type FirebaseApp, type FirebaseOptions } from 'firebase/app';
 import { getAuth, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
@@ -16,7 +16,7 @@ const staticFirebaseConfig: FirebaseOptions = {
   apiKey: "AIzaSyDKQK4mfCGlSCwJS7oOdMhJa0SIJAv3nXM",
   authDomain: "nabd-d71ab.firebaseapp.com",
   projectId: "nabd-d71ab",
-  storageBucket: "nabd-d71ab.firebasestorage.app",
+  storageBucket: "nabd-d71ab.appspot.com",
   messagingSenderId: "529236633123",
   appId: "1:529236633123:web:7d4945daae4d51038e3396",
   measurementId: "G-X5SY2K798F"
