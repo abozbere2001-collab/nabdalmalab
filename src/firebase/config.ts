@@ -4,7 +4,7 @@ import { getAuth, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 
 // Configuration object for Firebase
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyDKQK4mfCGlSCwJS7oOdMhJa0SIJAv3nXM",
   authDomain: "nabd-d71ab.firebaseapp.com",
   projectId: "nabd-d71ab",
