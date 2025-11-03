@@ -33,27 +33,33 @@ export function FirebaseClientProvider({ children }: FirebaseClientProviderProps
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // This effect runs only on the client side
+    // This effect runs only on the client side, after the component has mounted
+    // and the `window` object is available.
+    
+    // Create a dynamic config object to avoid modifying the static one.
     const dynamicConfig = { ...staticFirebaseConfig };
     
-    // Set the authDomain dynamically to the current hostname.
+    // Dynamically set the authDomain to the current hostname.
     // This is the key to solving the unauthorized-domain issue in ephemeral environments.
     dynamicConfig.authDomain = window.location.hostname;
 
+    // Initialize Firebase only once.
     const app = getApps().length === 0 ? initializeApp(dynamicConfig) : getApp();
     const auth = getAuth(app);
     const firestore = getFirestore(app);
     
     setServices({ firebaseApp: app, auth, firestore });
-    setLoading(false);
+    setLoading(false); // Mark initialization as complete.
 
-  }, []); // Empty dependency array ensures this runs only once on mount.
+  }, []); // The empty dependency array ensures this effect runs only once on mount.
 
+  // Render nothing until Firebase is fully initialized on the client.
+  // This prevents child components from trying to access Firebase services too early.
   if (loading || !services) {
-    // You can render a loading spinner here if needed
     return null; 
   }
 
+  // Once initialized, provide the Firebase services to the rest of the app.
   return (
     <FirebaseProvider
       firebaseApp={services.firebaseApp}
