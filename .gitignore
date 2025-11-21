@@ -15,28 +15,56 @@
 # Production
 /build
 
-# Logs
+# Misc
+.DS_Store
+*.pem
+
+# Vercel
+.vercel
+
+#- IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# - Mac
+.DS_Store
+.Trashes
+.VolumeIcon.icns
+.fseventsd
+
+#- Vscode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+#- env files
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+#- logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Local development environments
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+#- patch-package
+/patches
 
-# Turborepo
+#- turbo
 .turbo
 
-# Firebase
-*.firebase
+# firebase
+.firebase
 firebase-debug.log
-database-debug.log
-firestore-debug.log
-storage-debug.log
-
-# Other
-.DS_Store
-*.pem
