@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
-    "genkit:watch": "genkit start -- tsx --watch src_ai/dev.ts",
+    "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
@@ -37,7 +37,6 @@
     "@radix-ui/react-tabs": "^1.1.3",
     "@radix-ui/react-toast": "^1.2.6",
     "@radix-ui/react-tooltip": "^1.1.8",
-    "@revenuecat/purchases-react": "^4.5.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
