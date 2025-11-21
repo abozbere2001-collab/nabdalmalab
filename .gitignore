@@ -1,9 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # Dependencies
 /node_modules
 /.pnp
 .pnp.js
+.pnp.cjs
 
 # Testing
 /coverage
@@ -12,59 +11,28 @@
 /.next/
 /out/
 
-# Production
+# Production build
 /build
 
-# Misc
+# Miscellaneous
 .DS_Store
 *.pem
 
-# Vercel
-.vercel
-
-#- IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# - Mac
-.DS_Store
-.Trashes
-.VolumeIcon.icns
-.fseventsd
-
-#- Vscode
-.vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-*.code-workspace
-
-#- env files
-.env
-.env*.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.env
-
-#- logs
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-#- patch-package
-/patches
+# Local environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-#- turbo
-.turbo
+# Vercel
+.vercel
 
-# firebase
-.firebase
-firebase-debug.log
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
