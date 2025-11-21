@@ -1,46 +1,7 @@
-/**
- * @file Firebase Security Rules for Goal Stack application.
- *
- * @description This ruleset enforces a user-ownership model for user data and allows public read access to matches, competitions, teams and news, with restricted write access based on ownership or admin privileges.
- *
- * @dataStructure
- * - /users/{userId}: Stores user profiles. User's can only read/write their own data.
- * - /matches/{matchId}: Stores match data. Publicly readable, writeable by admins only.
- * - /competitions/{competitionId}: Stores competition data. Publicly readable, writeable by admins only.
- * - /teams/{teamId}: Stores team data. Publicly readable, writeable by admins only.
- * - /news/{newsId}: Stores news articles. Publicly readable, writeable by admins only.
- * - /admins/{adminId}: Stores administrator user data. Existence of a document in this collection grants admin privileges.
- *
- * @keySecurityDecisions
- * - Users can only access their own data under /users/{userId}.
- * - Listing of users is disallowed.
- * - Public read access to matches, competitions, teams and news.
- * - Write access to matches, competitions, teams and news is restricted to admins.
- * - The existence of a document under /admins/{adminId} grants admin privileges.
- *
- * @denormalizationForAuthorization
- * - The `favoriteTeamIds`, `favoriteCompetitionIds` and `favoriteMatchIds` arrays within the `/users/{userId}` document denormalize the user's preferences. This eliminates the need for `get()` calls in security rules when accessing related data.
- * - News articles are associated with the Admin's user ID, enabling easy rule creation.
- *
- * @structuralSegregation
- * - Drafts vs. published content is not explicitly segregated. All data under a given path is treated uniformly.
- */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    /**
-     * @description Manages user profiles. Users can only read and write their own profile data.
-     * @path /users/{userId}
-     * @allow (create) - User with UID 'user123' creates a new profile with userId: 'user123'.
-     * @allow (get) - User with UID 'user123' reads their own profile at /users/user123.
-     * @allow (update) - User with UID 'user123' updates their own profile at /users/user123.
-     * @allow (delete) - User with UID 'user123' deletes their own profile at /users/user123.
-     * @deny (create) - User with UID 'user123' attempts to create a profile for userId: 'user456'.
-     * @deny (get) - User with UID 'user123' attempts to read the profile of /users/user456.
-     * @deny (update) - User with UID 'user123' attempts to update the profile of /users/user456.
-     * @principle Enforces strict user-ownership for profile data.
-     */
     match /users/{userId} {
       allow get: if isOwner(userId);
       allow list: if false;
@@ -48,10 +9,6 @@ service cloud.firestore {
       allow update: if isOwner(userId);
       allow delete: if isOwner(userId);
 
-      /**
-       * @description Manages user's favorite data. Users can only read and write their own data.
-       * @path /users/{userId}/favorites/{favoriteId}
-       */
       match /favorites/{favoriteId} {
         allow get: if isOwner(userId);
         allow list: if false;
@@ -61,17 +18,6 @@ service cloud.firestore {
       }
     }
 
-    /**
-     * @description Manages match data. Accessible to everyone for reading.  Only admins can modify.
-     * @path /matches/{matchId}
-     * @allow (get) - Any user can read a match document.
-     * @allow (list) - Any user can list match documents.
-     * @allow (create) - An admin user creates a new match document.
-     * @deny (create) - A non-admin user attempts to create a new match document.
-     * @deny (update) - A non-admin user attempts to update a match document.
-     * @deny (delete) - A non-admin user attempts to delete a match document.
-     * @principle Public read access with admin-only writes.
-     */
     match /matches/{matchId} {
       allow get: if true;
       allow list: if true;
@@ -80,17 +26,6 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    /**
-     * @description Manages competition data. Accessible to everyone for reading. Only admins can modify.
-     * @path /competitions/{competitionId}
-     * @allow (get) - Any user can read a competition document.
-     * @allow (list) - Any user can list competition documents.
-     * @allow (create) - An admin user creates a new competition document.
-     * @deny (create) - A non-admin user attempts to create a new competition document.
-     * @deny (update) - A non-admin user attempts to update a competition document.
-     * @deny (delete) - A non-admin user attempts to delete a competition document.
-     * @principle Public read access with admin-only writes.
-     */
     match /competitions/{competitionId} {
       allow get: if true;
       allow list: if true;
@@ -99,17 +34,6 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    /**
-     * @description Manages team data. Accessible to everyone for reading. Only admins can modify.
-     * @path /teams/{teamId}
-     * @allow (get) - Any user can read a team document.
-     * @allow (list) - Any user can list team documents.
-     * @allow (create) - An admin user creates a new team document.
-     * @deny (create) - A non-admin user attempts to create a new team document.
-     * @deny (update) - A non-admin user attempts to update a team document.
-     * @deny (delete) - A non-admin user attempts to delete a team document.
-     * @principle Public read access with admin-only writes.
-     */
     match /teams/{teamId} {
       allow get: if true;
       allow list: if true;
@@ -118,17 +42,6 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    /**
-     * @description Manages news articles. Accessible to everyone for reading. Only admins can modify.
-     * @path /news/{newsId}
-     * @allow (get) - Any user can read a news article.
-     * @allow (list) - Any user can list news articles.
-     * @allow (create) - An admin user creates a new news article.
-     * @deny (create) - A non-admin user attempts to create a new news article.
-     * @deny (update) - A non-admin user attempts to update a news article.
-     * @deny (delete) - A non-admin user attempts to delete a news article.
-     * @principle Public read access with admin-only writes.
-     */
     match /news/{newsId} {
       allow get: if true;
       allow list: if true;
@@ -137,28 +50,15 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    /**
-     * @description Manages admin user data. Existence of a document in this collection grants admin privileges.
-     * @path /admins/{adminId}
-     * @allow (get) - Any user can read an admin document.
-     * @allow (list) - Any user can list admin documents.
-     * @allow (create) - Only firebase functions can create admins.
-     * @deny (create) - A non-admin user attempts to create a new admin document.
-     *
-     *  // TODO: Add owner validation once the schema is updated with an ownership field.
-     * @deny (update) - A non-admin user attempts to update a admin document.
-     * @deny (delete) - A non-admin user attempts to delete a admin document.
-     */
     match /admins/{adminId} {
       allow get: if isAdmin();
       allow list: if false;
-      allow create: if false; // Only firebase functions can create admins.
-      allow update: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
-      allow delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
     }
   }
 
-  // Helper functions
   function isSignedIn() {
     return request.auth != null;
   }
