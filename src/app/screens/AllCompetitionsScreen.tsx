@@ -430,7 +430,7 @@ export function AllCompetitionsScreen({ navigate, goBack, canGoBack, favorites, 
                                 <Crown className={cn("h-5 w-5 text-muted-foreground/60", isCrowned && "fill-current text-yellow-400")} />
                               </Button>
                              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleFavoriteToggle(team, 'teams'); }}>
-                               <Star className={isStarred ? "h-5 w-5 text-yellow-400 fill-current" : "h-5 w-5 text-muted-foreground/50"} />
+                               <Star className={cn("h-5 w-5 text-muted-foreground/50", isStarred && "fill-current text-yellow-400")} />
                              </Button>
                            </div>
                          </li>

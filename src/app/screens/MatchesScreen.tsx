@@ -172,13 +172,10 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
 
     useEffect(() => {
         if (todayRef.current && scrollerRef.current) {
-            const scroller = scrollerRef.current;
-            const todayButton = todayRef.current;
-            
-            // This is a more direct way to center the element.
-            todayButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            // The magic line that centers the element
+            todayRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
-    }, []); // Runs only once on mount to scroll to today
+    }, []); // Empty dependency array ensures this runs only once on mount
 
     const getDayLabel = (date: Date) => {
         if (isToday(date)) return "اليوم";
@@ -189,7 +186,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
 
     return (
         <div className="bg-date-scroller-background py-1 shadow-md h-[38px] flex items-center">
-            <div ref={scrollerRef} className="flex flex-row-reverse overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div ref={scrollerRef} className="flex-1 overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 <div className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map((date) => {
                         const dateKey = formatDateKey(date);
