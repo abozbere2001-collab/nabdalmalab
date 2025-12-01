@@ -163,36 +163,21 @@ const formatDateKey = (date: Date): string => format(date, 'yyyy-MM-dd');
 const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: string, onDateSelect: (dateKey: string) => void}) => {
     const dates = useMemo(() => {
         const today = new Date();
-        // Generate a range of 1 year back and 1 year forward (731 days total)
         return Array.from({ length: 731 }, (_, i) => addDays(today, i - 365));
     }, []);
     
     const scrollerRef = useRef<HTMLDivElement>(null);
+    const todayRef = useRef<HTMLButtonElement>(null);
 
-    // This effect runs once on mount to scroll to the initial selected date.
     useEffect(() => {
-        const scroller = scrollerRef.current;
-        if (!scroller) return;
-
-        const todayIndex = 365; // Today is always at index 365
-        const todayButton = scroller.children[todayIndex] as HTMLElement;
-
-        if (todayButton) {
-            const scrollerRect = scroller.getBoundingClientRect();
-            const buttonRect = todayButton.getBoundingClientRect();
-            
-            // Calculate scroll position to center the button
-            const scrollLeft = todayButton.offsetLeft - (scrollerRect.width / 2) + (buttonRect.width / 2);
-            
-            // Using a small timeout to ensure the browser has finished layout calculations
-            setTimeout(() => {
-                scroller.scrollTo({
-                    left: scrollLeft,
-                    behavior: 'auto' // Use 'auto' for initial scroll to avoid jerky motion
-                });
-            }, 50);
+        if (todayRef.current) {
+            todayRef.current.scrollIntoView({
+                behavior: 'auto',
+                inline: 'center',
+                block: 'nearest'
+            });
         }
-    }, []); // Empty dependency array ensures this runs only once
+    }, []);
 
     const getDayLabel = (date: Date) => {
         if (isToday(date)) return "اليوم";
@@ -205,13 +190,15 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
         <div className="bg-card py-1 border-x border-b rounded-b-lg shadow-md -mt-1 h-[48px] flex items-center">
             <ScrollArea className="w-full whitespace-nowrap">
                 <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
-                    {dates.map((date, index) => {
+                    {dates.map((date) => {
                         const dateKey = formatDateKey(date);
                         const isSelected = dateKey === selectedDateKey;
+                        const isCurrentToday = isToday(date);
+                        
                         return (
                             <button
                                 key={dateKey}
-                                id={`date-button-${dateKey}`}
+                                ref={isCurrentToday ? todayRef : null}
                                 className={cn(
                                     "relative flex flex-col items-center justify-center h-[38px] py-1 px-2 min-w-[38px] rounded-lg transition-colors",
                                     "text-foreground/80 hover:bg-accent/50",
@@ -464,3 +451,5 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
+    
