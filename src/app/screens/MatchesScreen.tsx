@@ -166,17 +166,20 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
         return Array.from({ length: 731 }, (_, i) => addDays(today, i - 365));
     }, []);
     
+    const scrollerRef = useRef<HTMLDivElement>(null);
     const todayRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        if (todayRef.current) {
-            todayRef.current.scrollIntoView({
-                behavior: 'auto',
-                inline: 'center',
-                block: 'nearest'
-            });
+        if (todayRef.current && scrollerRef.current) {
+            const scroller = scrollerRef.current;
+            const todayButton = todayRef.current;
+            const scrollerRect = scroller.getBoundingClientRect();
+            const todayRect = todayButton.getBoundingClientRect();
+            // Calculate the offset to center the button
+            const scrollOffset = todayRect.left - scrollerRect.left - (scrollerRect.width / 2) + (todayRect.width / 2);
+            scroller.scrollLeft += scrollOffset;
         }
-    }, []);
+    }, []); // Runs only once on mount
 
     const getDayLabel = (date: Date) => {
         if (isToday(date)) return "اليوم";
@@ -186,8 +189,8 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-date-scroller-background py-1 shadow-md h-[38px] flex items-center rounded-b-lg">
-            <ScrollArea className="w-full whitespace-nowrap">
+        <div className="bg-date-scroller-background py-1 shadow-md h-[38px] flex items-center">
+            <div ref={scrollerRef} className="flex flex-row-reverse overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 <div className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map((date) => {
                         const dateKey = formatDateKey(date);
@@ -213,8 +216,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                         );
                     })}
                 </div>
-                <ScrollBar orientation="horizontal" className="h-0" />
-            </ScrollArea>
+            </div>
         </div>
     );
 }
@@ -428,7 +430,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
         />
         
         <div className="flex flex-1 flex-col min-h-0">
-             <div className="sticky top-0 z-10 bg-background">
+             <div className="sticky top-0 z-10">
                  <DateScroller selectedDateKey={selectedDateKey} onDateSelect={handleDateChange} />
             </div>
             
