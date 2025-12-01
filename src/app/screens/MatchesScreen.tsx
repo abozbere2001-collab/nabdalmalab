@@ -169,31 +169,30 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     
     const scrollerRef = useRef<HTMLDivElement>(null);
 
+    // This effect runs once on mount to scroll to the initial selected date.
     useEffect(() => {
         const scroller = scrollerRef.current;
         if (!scroller) return;
 
-        // Find the index of the selected date. 'today' is at index 365.
-        const selectedIndex = dates.findIndex(d => formatDateKey(d) === selectedDateKey);
-        if (selectedIndex === -1) return;
+        const todayIndex = 365; // Today is always at index 365
+        const todayButton = scroller.children[todayIndex] as HTMLElement;
 
-        // Find the DOM element for the selected button
-        const selectedButton = scroller.children[selectedIndex] as HTMLElement;
-        if (!selectedButton) return;
-        
-        const scrollerRect = scroller.getBoundingClientRect();
-        const selectedRect = selectedButton.getBoundingClientRect();
-
-        // Calculate the scroll position to center the selected button
-        // The logic is: button's left edge relative to scroller - half scroller width + half button width
-        const scrollOffset = selectedButton.offsetLeft - scroller.offsetLeft - (scrollerRect.width / 2) + (selectedRect.width / 2);
-        
-        setTimeout(() => {
-            scroller.scrollTo({ left: scrollOffset, behavior: 'smooth' });
-        }, 100);
-
-    }, [selectedDateKey, dates]);
-
+        if (todayButton) {
+            const scrollerRect = scroller.getBoundingClientRect();
+            const buttonRect = todayButton.getBoundingClientRect();
+            
+            // Calculate scroll position to center the button
+            const scrollLeft = todayButton.offsetLeft - (scrollerRect.width / 2) + (buttonRect.width / 2);
+            
+            // Using a small timeout to ensure the browser has finished layout calculations
+            setTimeout(() => {
+                scroller.scrollTo({
+                    left: scrollLeft,
+                    behavior: 'auto' // Use 'auto' for initial scroll to avoid jerky motion
+                });
+            }, 50);
+        }
+    }, []); // Empty dependency array ensures this runs only once
 
     const getDayLabel = (date: Date) => {
         if (isToday(date)) return "اليوم";
@@ -203,7 +202,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-card py-1 border-x border-b rounded-b-lg shadow-md -mt-1 h-[52px] flex items-center">
+        <div className="bg-card py-1 border-x border-b rounded-b-lg shadow-md -mt-1 h-[48px] flex items-center">
             <ScrollArea className="w-full whitespace-nowrap">
                 <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map((date, index) => {
