@@ -5,7 +5,7 @@ import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import type { ScreenProps } from '@/app/page';
-import { format, addDays, subDays, isToday } from 'date-fns';
+import { format, addDays, subDays, isToday, isYesterday, isTomorrow } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { useAdmin, useAuth, useFirestore } from '@/firebase/provider';
 import { doc, onSnapshot, collection, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
@@ -160,79 +160,37 @@ FixturesList.displayName = 'FixturesList';
 
 const formatDateKey = (date: Date): string => format(date, 'yyyy-MM-dd');
 
-const getDayLabel = (date: Date) => {
+const getDayLabel = (dateKey: string) => {
+    const date = new Date(dateKey);
     if (isToday(date)) return "اليوم";
+    if (isYesterday(date)) return "الأمس";
+    if (isTomorrow(date)) return "غداً";
     return format(date, "EEEE", { locale: ar });
 };
 
 const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: string, onDateSelect: (dateKey: string) => void}) => {
-    const dates = useMemo(() => {
-        const today = new Date();
-        const days = [];
-        for (let i = -365; i <= 365; i++) {
-            days.push(addDays(today, i));
-        }
-        return days;
-    }, []);
-    
-    const scrollerRef = useRef<HTMLDivElement>(null);
-    const selectedButtonRef = useRef<HTMLButtonElement>(null);
-
-    useEffect(() => {
-        const scroller = scrollerRef.current;
-        const selectedButton = selectedButtonRef.current;
-        
-        const centerOnSelected = () => {
-            if (scroller && selectedButton) {
-                const scrollerRect = scroller.getBoundingClientRect();
-                const buttonRect = selectedButton.getBoundingClientRect();
-                const scrollOffset = buttonRect.left - scrollerRect.left - (scrollerRect.width / 2) + (buttonRect.width / 2);
-                scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
-            }
-        };
-        setTimeout(centerOnSelected, 100);
-    }, [selectedDateKey]);
     
     return (
-        <div className="relative bg-card py-2 border-x border-b rounded-b-lg shadow-md flex items-center w-full">
-            <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 z-10 flex-shrink-0"
-                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
-            >
-                <ChevronRight className="h-5 w-5" />
-            </Button>
-            <ScrollArea ref={scrollerRef} className="w-full whitespace-nowrap">
-                <div className="flex flex-row-reverse justify-start items-center h-12">
-                    {dates.map(date => {
-                        const dateKey = formatDateKey(date);
-                        const isSelected = dateKey === selectedDateKey;
-
-                        return (
-                            <button
-                                key={dateKey}
-                                ref={isSelected ? selectedButtonRef : null}
-                                className={cn(
-                                    "flex flex-col items-center justify-center h-12 w-12 rounded-lg transition-colors ml-2 flex-shrink-0",
-                                    "text-foreground/80 hover:bg-accent/50",
-                                    isSelected && "bg-primary text-primary-foreground"
-                                )}
-                                onClick={() => onDateSelect(dateKey)}
-                            >
-                                <span className="text-[11px] font-medium">{format(date, "EEE", { locale: ar })}</span>
-                                <span className="font-bold text-lg">{format(date, 'd')}</span>
-                            </button>
-                        )
-                    })}
-                </div>
-                <ScrollBar orientation="horizontal" className="h-0" />
-            </ScrollArea>
+        <div className="relative bg-card py-2 border-x border-b rounded-b-lg shadow-md flex items-center justify-between w-full px-4">
             <Button
                 variant="ghost"
                 size="icon"
                 className="h-9 w-9 z-10 flex-shrink-0"
                 onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
+            >
+                <ChevronRight className="h-5 w-5" />
+            </Button>
+
+            <div className="flex flex-col items-center text-center">
+                <div className="font-bold text-lg">{getDayLabel(selectedDateKey)}</div>
+                <div className="text-xs text-muted-foreground">{format(new Date(selectedDateKey), "d MMMM yyyy", {locale: ar})}</div>
+            </div>
+
+            <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 z-10 flex-shrink-0"
+                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
             >
                 <ChevronLeft className="h-5 w-5" />
             </Button>
