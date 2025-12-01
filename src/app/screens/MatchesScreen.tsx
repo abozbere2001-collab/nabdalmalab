@@ -163,6 +163,7 @@ const formatDateKey = (date: Date): string => format(date, 'yyyy-MM-dd');
 const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: string, onDateSelect: (dateKey: string) => void}) => {
     const dates = useMemo(() => {
         const today = new Date();
+        // Generate 365 days past and 365 days future
         return Array.from({ length: 731 }, (_, i) => addDays(today, i - 365));
     }, []);
     
@@ -170,16 +171,10 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     const todayRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        if (todayRef.current && scrollerRef.current) {
-            const scroller = scrollerRef.current;
-            const todayButton = todayRef.current;
-            const scrollerRect = scroller.getBoundingClientRect();
-            const todayRect = todayButton.getBoundingClientRect();
-            // Calculate the offset to center the button
-            const scrollOffset = todayRect.left - scrollerRect.left - (scrollerRect.width / 2) + (todayRect.width / 2);
-            scroller.scrollLeft += scrollOffset;
+        if (todayRef.current) {
+            todayRef.current.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
         }
-    }, []); // Runs only once on mount
+    }, []); // Runs only once on mount to scroll to today
 
     const getDayLabel = (date: Date) => {
         if (isToday(date)) return "اليوم";
@@ -195,12 +190,11 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                     {dates.map((date) => {
                         const dateKey = formatDateKey(date);
                         const isSelected = dateKey === selectedDateKey;
-                        const isCurrentToday = isToday(date);
                         
                         return (
                             <button
                                 key={dateKey}
-                                ref={isCurrentToday ? todayRef : null}
+                                ref={isToday(date) ? todayRef : null}
                                 className={cn(
                                     "relative flex flex-col items-center justify-center h-[30px] py-1 px-3 min-w-[50px] rounded-md transition-colors",
                                     "text-date-scroller-foreground hover:bg-white/20",

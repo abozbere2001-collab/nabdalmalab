@@ -25,6 +25,7 @@
     --input: 0 0% 93%;
     --ring: 0 0% 9%;
     --radius: 1.5rem;
+    /* Default theme variables for nav bars (used by dark theme as base) */
     --header-background: hsl(var(--card));
     --header-foreground: hsl(var(--card-foreground));
     --date-scroller-background: hsl(var(--card));
