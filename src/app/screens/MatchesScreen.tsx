@@ -197,7 +197,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-card py-0.5 border-x border-b rounded-b-lg shadow-md -mt-1">
+        <div className="bg-card py-1 border-x border-b rounded-b-lg shadow-md -mt-1">
             <ScrollArea className="w-full whitespace-nowrap">
                 <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map(date => {
@@ -208,7 +208,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isSelected ? selectedButtonRef : null}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center h-auto py-0.5 px-3 min-w-[40px] rounded-lg transition-colors",
+                                    "relative flex flex-col items-center justify-center h-auto py-1 px-2 min-w-[38px] rounded-lg transition-colors",
                                     "text-foreground/80 hover:bg-accent/50",
                                     isSelected && "bg-primary text-primary-foreground hover:bg-primary/90"
                                 )}
@@ -421,12 +421,12 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
                <div className="flex items-center gap-0.5">
                   <div
                     onClick={() => setShowOdds(prev => !prev)}
-                    className={cn("flex items-center justify-center h-7 w-7 rounded-md cursor-pointer", showOdds ? 'bg-accent' : 'hover:bg-accent/50')}
+                    className={cn("flex items-center justify-center h-8 w-8 rounded-md cursor-pointer", showOdds ? 'bg-accent' : 'hover:bg-accent/50')}
                   >
                     <span className="text-xs font-mono select-none">1x2</span>
                   </div>
                   <SearchSheet navigate={navigate} favorites={favorites} customNames={customNames} setFavorites={setFavorites} onCustomNameChange={onCustomNameChange}>
-                      <Button variant="ghost" size="icon" className="h-7 w-7">
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
                           <Search className="h-5 w-5" />
                       </Button>
                   </SearchSheet>
