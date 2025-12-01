@@ -24,7 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = "e931ffb3ccda478e60b74c6e36913c90";
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
 
 interface GroupedFixtures {
     [leagueName: string]: {
@@ -197,7 +197,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-card py-1 border-x border-b rounded-b-lg shadow-md -mt-1">
+        <div className="bg-card py-1 border-x border-b rounded-b-lg shadow-md -mt-1 h-16 flex items-center">
             <ScrollArea className="w-full whitespace-nowrap">
                 <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map(date => {
@@ -294,7 +294,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
         setLoading(true);
 
         try {
-            const res = await fetch(`https://${API_FOOTBALL_HOST}/fixtures?date=${dateKey}`, { 
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures?date=${dateKey}`, { 
                 signal: abortSignal,
                 headers: {
                     'x-rapidapi-host': API_FOOTBALL_HOST,
@@ -340,7 +340,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
         if (liveFixtureIds.length === 0) return;
         
         try {
-            const res = await fetch(`https://${API_FOOTBALL_HOST}/fixtures?ids=${liveFixtureIds.join('-')}`, { 
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures?ids=${liveFixtureIds.join('-')}`, { 
                 signal: abortSignal,
                 headers: {
                     'x-rapidapi-host': API_FOOTBALL_HOST,
@@ -459,7 +459,3 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
-
-    
-
-    
