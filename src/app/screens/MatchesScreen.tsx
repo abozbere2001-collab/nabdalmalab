@@ -160,40 +160,62 @@ FixturesList.displayName = 'FixturesList';
 
 const formatDateKey = (date: Date): string => format(date, 'yyyy-MM-dd');
 
-const getDayLabel = (dateKey: string) => {
-    const date = new Date(dateKey);
-    if (isToday(date)) return "اليوم";
-    if (isYesterday(date)) return "الأمس";
-    if (isTomorrow(date)) return "غداً";
-    return format(date, "EEEE", { locale: ar });
-};
-
 const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: string, onDateSelect: (dateKey: string) => void}) => {
+    const dates = useMemo(() => {
+        const today = new Date();
+        return Array.from({ length: 30 }, (_, i) => addDays(today, i - 15));
+    }, []);
     
+    const scrollerRef = useRef<HTMLDivElement>(null);
+    const selectedButtonRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        const scroller = scrollerRef.current;
+        const selectedButton = selectedButtonRef.current;
+
+        if (scroller && selectedButton) {
+            const scrollerRect = scroller.getBoundingClientRect();
+            const selectedRect = selectedButton.getBoundingClientRect();
+            // Calculate the scroll position to center the selected button
+            const scrollOffset = selectedRect.left - scrollerRect.left - (scrollerRect.width / 2) + (selectedRect.width / 2);
+            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
+        }
+    }, [selectedDateKey]);
+
+    const getDayLabel = (date: Date) => {
+        if (isToday(date)) return "اليوم";
+        if (isYesterday(date)) return "الأمس";
+        if (isTomorrow(date)) return "غداً";
+        return format(date, "EEE", { locale: ar });
+    };
+
     return (
-        <div className="relative bg-card py-2 border-x border-b rounded-b-lg shadow-md flex items-center justify-between w-full px-4">
-            <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 z-10 flex-shrink-0"
-                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
-            >
-                <ChevronRight className="h-5 w-5" />
-            </Button>
-
-            <div className="flex flex-col items-center text-center">
-                <div className="font-bold text-lg">{getDayLabel(selectedDateKey)}</div>
-                <div className="text-xs text-muted-foreground">{format(new Date(selectedDateKey), "d MMMM yyyy", {locale: ar})}</div>
-            </div>
-
-            <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 z-10 flex-shrink-0"
-                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
-            >
-                <ChevronLeft className="h-5 w-5" />
-            </Button>
+        <div className="bg-card py-2 border-x border-b rounded-b-lg shadow-md -mt-1">
+            <ScrollArea className="w-full whitespace-nowrap">
+                <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
+                    {dates.map(date => {
+                        const dateKey = formatDateKey(date);
+                        const isSelected = dateKey === selectedDateKey;
+                        return (
+                            <button
+                                key={dateKey}
+                                ref={isSelected ? selectedButtonRef : null}
+                                className={cn(
+                                    "relative flex flex-col items-center justify-center h-auto py-2 px-3 min-w-[50px] rounded-lg transition-colors",
+                                    "text-foreground/80 hover:bg-accent/50",
+                                    isSelected && "bg-primary text-primary-foreground hover:bg-primary/90"
+                                )}
+                                onClick={() => onDateSelect(dateKey)}
+                            >
+                                <span className="text-xs font-medium">{getDayLabel(date)}</span>
+                                <span className="font-bold text-lg">{format(date, 'd')}</span>
+                                <span className="text-[10px] uppercase">{format(date, 'MMM', { locale: ar })}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+                <ScrollBar orientation="horizontal" className="h-0" />
+            </ScrollArea>
         </div>
     );
 }
@@ -430,5 +452,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
+    
 
     
