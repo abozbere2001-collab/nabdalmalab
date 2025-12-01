@@ -186,7 +186,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-date-scroller-background py-1 shadow-md h-[48px] flex items-center">
+        <div className="bg-date-scroller-background py-1 shadow-md h-[38px] flex items-center rounded-b-lg">
             <ScrollArea className="w-full whitespace-nowrap">
                 <div className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map((date) => {
@@ -199,14 +199,14 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isCurrentToday ? todayRef : null}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center h-[38px] py-1 px-3 min-w-[50px] rounded-lg transition-colors",
+                                    "relative flex flex-col items-center justify-center h-[30px] py-1 px-3 min-w-[50px] rounded-md transition-colors",
                                     "text-date-scroller-foreground hover:bg-white/20",
                                     isSelected && "bg-date-scroller-active-background text-date-scroller-active-foreground font-bold"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
                                 <span className="font-bold text-sm">{getDayLabel(date)}</span>
-                                <span className="absolute top-0.5 right-0.5 text-[8px] font-mono opacity-70">
+                                <span className="absolute top-0 right-0.5 text-[8px] font-mono opacity-70">
                                     {format(date, 'd/M')}
                                 </span>
                             </button>
