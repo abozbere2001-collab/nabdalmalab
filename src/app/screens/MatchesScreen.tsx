@@ -171,8 +171,18 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     const todayRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        if (todayRef.current) {
-            todayRef.current.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+        if (todayRef.current && scrollerRef.current) {
+            const scroller = scrollerRef.current;
+            const todayButton = todayRef.current;
+            const scrollerRect = scroller.getBoundingClientRect();
+            const todayRect = todayButton.getBoundingClientRect();
+
+            // Calculate the scroll position to center the 'today' button
+            const scrollOffset = todayRect.left - scrollerRect.left - (scrollerRect.width / 2) + (todayRect.width / 2);
+            scroller.scrollTo({
+                left: scroller.scrollLeft + scrollOffset,
+                behavior: 'smooth'
+            });
         }
     }, []); // Runs only once on mount to scroll to today
 
