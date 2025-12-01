@@ -187,7 +187,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-date-scroller-background py-1 shadow-md h-[48px] flex items-center">
+        <div className="bg-date-scroller-background py-1 shadow-md h-[40px] flex items-center">
             <ScrollArea className="w-full whitespace-nowrap">
                 <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map((date) => {
@@ -200,15 +200,16 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isCurrentToday ? todayRef : null}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center h-[38px] py-1 px-2 min-w-[38px] rounded-lg transition-colors",
+                                    "relative flex flex-col items-center justify-center h-[30px] py-1 px-3 min-w-[50px] rounded-lg transition-colors",
                                     "text-date-scroller-foreground hover:bg-white/20",
                                     isSelected && "bg-date-scroller-active-background text-date-scroller-active-foreground"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
-                                <span className="text-[9px] font-medium">{getDayLabel(date)}</span>
-                                <span className="font-bold text-xs">{format(date, 'd')}</span>
-                                <span className="text-[8px] uppercase">{format(date, 'MMM', { locale: ar })}</span>
+                                <span className="font-bold text-sm">{getDayLabel(date)}</span>
+                                <span className="absolute top-0.5 right-0.5 text-[8px] font-mono opacity-70">
+                                    {format(date, 'd/M')}
+                                </span>
                             </button>
                         );
                     })}
@@ -286,7 +287,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
         setLoading(true);
 
         try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?date=${dateKey}`, { 
+            const res = await fetch(`https://${API_FOOTBALL_HOST}/fixtures?date=${dateKey}`, { 
                 signal: abortSignal,
                 headers: {
                     'x-rapidapi-host': API_FOOTBALL_HOST,
@@ -332,7 +333,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
         if (liveFixtureIds.length === 0) return;
         
         try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?ids=${liveFixtureIds.join('-')}`, { 
+            const res = await fetch(`https://${API_FOOTBALL_HOST}/fixtures?ids=${liveFixtureIds.join('-')}`, { 
                 signal: abortSignal,
                 headers: {
                     'x-rapidapi-host': API_FOOTBALL_HOST,

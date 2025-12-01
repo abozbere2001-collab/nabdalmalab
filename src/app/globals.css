@@ -56,6 +56,15 @@
     --border: 240 2% 20%; /* Adjusted for new dark theme */
     --input: 240 2% 18%; /* Adjusted for new dark theme */
     --ring: 140 70% 50%;
+    --header-background: hsl(240 2% 12%);
+    --header-foreground: hsl(220 15% 95%);
+    --date-scroller-background: hsl(240 2% 12%);
+    --date-scroller-foreground: hsl(220 15% 60%);
+    --date-scroller-active-background: hsl(140 70% 50%);
+    --date-scroller-active-foreground: hsl(140 90% 10%);
+    --bottom-nav-background: hsl(240 2% 12%);
+    --bottom-nav-foreground: hsl(220 15% 60%);
+    --bottom-nav-active: hsl(140 70% 50%);
   }
  
   .light {
