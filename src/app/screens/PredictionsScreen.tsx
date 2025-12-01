@@ -159,11 +159,11 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     }, [selectedDateKey]);
 
     return (
-        <div className="relative bg-card py-2 border-x border-b rounded-b-lg shadow-md -mt-1 flex items-center justify-center">
+        <div className="relative bg-date-scroller-background py-2 shadow-md flex items-center justify-center">
              <Button 
                 variant="ghost" 
                 size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20"
                 onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
              >
                 <ChevronRight className="h-5 w-5" />
@@ -178,14 +178,13 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                             ref={isSelected ? selectedButtonRef : null}
                             className={cn(
                                 "relative flex flex-col items-center justify-center h-auto py-1 px-2 min-w-[40px] rounded-lg transition-colors ml-2",
-                                "text-foreground/80 hover:text-primary",
-                                isSelected && "text-primary"
+                                "text-date-scroller-foreground hover:bg-white/20",
+                                isSelected && "text-date-scroller-active-foreground bg-date-scroller-active-background"
                             )}
                             onClick={() => onDateSelect(dateKey)}
                         >
                             <span className="text-[10px] font-normal">{format(date, "EEE", { locale: ar })}</span>
                             <span className="font-semibold text-sm">{format(date, 'd')}</span>
-                            {isSelected && <span className="absolute bottom-0 h-0.5 w-3 rounded-full bg-primary" />}
                         </button>
                     )
                 })}
@@ -193,7 +192,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
              <Button 
                 variant="ghost" 
                 size="icon"
-                className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8"
+                className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20"
                 onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
              >
                 <ChevronLeft className="h-5 w-5" />
@@ -490,7 +489,7 @@ export function PredictionsScreen({ navigate, goBack, canGoBack, favorites, cust
                 actions={
                   <div className="flex items-center gap-1">
                       <SearchSheet navigate={navigate} favorites={favorites} customNames={customNames} setFavorites={setFavorites}>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" className="hover:bg-white/20">
                               <Search className="h-5 w-5" />
                           </Button>
                       </SearchSheet>

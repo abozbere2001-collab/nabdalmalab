@@ -32,7 +32,7 @@ export function BottomNav({ activeScreen, onNavigate }: BottomNavProps) {
   };
 
   return (
-    <div className="h-16 flex-shrink-0 border-t bg-card/95 backdrop-blur-md">
+    <div className="h-16 flex-shrink-0 border-t bg-bottom-nav text-bottom-nav-foreground">
       <nav className="flex h-full items-center justify-around px-2 max-w-md mx-auto">
         {navItems.map(({ key, label, icon: Icon }) => {
           const isActive = activeScreen === key;
@@ -43,13 +43,13 @@ export function BottomNav({ activeScreen, onNavigate }: BottomNavProps) {
               onClick={() => handleNavigation(key as ScreenKey)}
               className={cn(
                 'relative flex h-full flex-col items-center justify-center gap-1 px-2 text-center text-xs font-medium outline-none transition-colors w-[60px]',
-                isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                isActive ? 'text-bottom-nav-active' : 'text-bottom-nav-foreground hover:text-bottom-nav-active'
               )}
             >
               <Icon className="h-6 w-6" />
               <span>{label}</span>
               {isActive && (
-                <div className="absolute bottom-1 h-1 w-6 rounded-full bg-primary" />
+                <div className="absolute bottom-1 h-1 w-6 rounded-full bg-bottom-nav-active" />
               )}
             </button>
           );

@@ -187,7 +187,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-card py-1 border-x border-b rounded-b-lg shadow-md -mt-1 h-[48px] flex items-center">
+        <div className="bg-date-scroller-background py-1 shadow-md h-[48px] flex items-center">
             <ScrollArea className="w-full whitespace-nowrap">
                 <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map((date) => {
@@ -201,8 +201,8 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 ref={isCurrentToday ? todayRef : null}
                                 className={cn(
                                     "relative flex flex-col items-center justify-center h-[38px] py-1 px-2 min-w-[38px] rounded-lg transition-colors",
-                                    "text-foreground/80 hover:bg-accent/50",
-                                    isSelected && "bg-primary text-primary-foreground hover:bg-primary/90"
+                                    "text-date-scroller-foreground hover:bg-white/20",
+                                    isSelected && "bg-date-scroller-active-background text-date-scroller-active-foreground"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
@@ -413,12 +413,12 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
                <div className="flex items-center gap-0.5">
                   <div
                     onClick={() => setShowOdds(prev => !prev)}
-                    className={cn("flex items-center justify-center h-8 w-8 rounded-md cursor-pointer", showOdds ? 'bg-accent' : 'hover:bg-accent/50')}
+                    className={cn("flex items-center justify-center h-8 w-8 rounded-md cursor-pointer", showOdds ? 'bg-black/20' : 'hover:bg-white/20')}
                   >
                     <span className="text-xs font-mono select-none">1x2</span>
                   </div>
                   <SearchSheet navigate={navigate} favorites={favorites} customNames={customNames} setFavorites={setFavorites} onCustomNameChange={onCustomNameChange}>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/20">
                           <Search className="h-5 w-5" />
                       </Button>
                   </SearchSheet>
@@ -428,7 +428,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
         />
         
         <div className="flex flex-1 flex-col min-h-0">
-             <div className="sticky top-0 z-10 px-1 pt-1 bg-background">
+             <div className="sticky top-0 z-10 bg-background">
                  <DateScroller selectedDateKey={selectedDateKey} onDateSelect={handleDateChange} />
             </div>
             
