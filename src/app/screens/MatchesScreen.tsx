@@ -163,13 +163,15 @@ const formatDateKey = (date: Date): string => format(date, 'yyyy-MM-dd');
 const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: string, onDateSelect: (dateKey: string) => void}) => {
     const dates = useMemo(() => {
         const today = new Date();
-        return Array.from({ length: 30 }, (_, i) => addDays(today, i - 15));
+        // Generate a range of 1 year back and 1 year forward (731 days total)
+        return Array.from({ length: 731 }, (_, i) => addDays(today, i - 365));
     }, []);
     
     const scrollerRef = useRef<HTMLDivElement>(null);
     const selectedButtonRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
+        // This effect runs once after initial render and when selectedDateKey changes.
         const scroller = scrollerRef.current;
         const selectedButton = selectedButtonRef.current;
 
@@ -178,9 +180,14 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             const selectedRect = selectedButton.getBoundingClientRect();
             // Calculate the scroll position to center the selected button
             const scrollOffset = selectedRect.left - scrollerRect.left - (scrollerRect.width / 2) + (selectedRect.width / 2);
-            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
+            
+            // Using setTimeout ensures the browser has painted the elements before we try to scroll.
+            setTimeout(() => {
+                scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
+            }, 100);
         }
     }, [selectedDateKey]);
+
 
     const getDayLabel = (date: Date) => {
         if (isToday(date)) return "اليوم";
@@ -201,14 +208,14 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isSelected ? selectedButtonRef : null}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center h-auto py-1 px-3 min-w-[45px] rounded-lg transition-colors",
+                                    "relative flex flex-col items-center justify-center h-auto py-0.5 px-3 min-w-[45px] rounded-lg transition-colors",
                                     "text-foreground/80 hover:bg-accent/50",
                                     isSelected && "bg-primary text-primary-foreground hover:bg-primary/90"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
                                 <span className="text-[10px] font-medium">{getDayLabel(date)}</span>
-                                <span className="font-bold text-base">{format(date, 'd')}</span>
+                                <span className="font-bold text-sm">{format(date, 'd')}</span>
                                 <span className="text-[9px] uppercase">{format(date, 'MMM', { locale: ar })}</span>
                             </button>
                         );
@@ -452,5 +459,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
+    
 
     
