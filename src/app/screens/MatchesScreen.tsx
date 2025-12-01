@@ -166,7 +166,6 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
         return Array.from({ length: 731 }, (_, i) => addDays(today, i - 365));
     }, []);
     
-    const scrollerRef = useRef<HTMLDivElement>(null);
     const todayRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
@@ -187,9 +186,9 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-date-scroller-background py-1 shadow-md h-[40px] flex items-center">
+        <div className="bg-date-scroller-background py-1 shadow-md h-[48px] flex items-center">
             <ScrollArea className="w-full whitespace-nowrap">
-                <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
+                <div className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map((date) => {
                         const dateKey = formatDateKey(date);
                         const isSelected = dateKey === selectedDateKey;
@@ -200,9 +199,9 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isCurrentToday ? todayRef : null}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center h-[30px] py-1 px-3 min-w-[50px] rounded-lg transition-colors",
+                                    "relative flex flex-col items-center justify-center h-[38px] py-1 px-3 min-w-[50px] rounded-lg transition-colors",
                                     "text-date-scroller-foreground hover:bg-white/20",
-                                    isSelected && "bg-date-scroller-active-background text-date-scroller-active-foreground"
+                                    isSelected && "bg-date-scroller-active-background text-date-scroller-active-foreground font-bold"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
@@ -407,7 +406,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
   return (
     <div className="flex h-full flex-col bg-background">
         <ScreenHeader 
-            title="" 
+            title="المباريات" 
             canGoBack={false}
             onBack={() => {}} 
             actions={
@@ -452,5 +451,3 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
-
-    
