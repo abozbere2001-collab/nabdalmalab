@@ -5,7 +5,7 @@ import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import type { ScreenProps } from '@/app/page';
-import { format, addDays, subDays, isToday, isYesterday, isTomorrow } from 'date-fns';
+import { format, addDays, subDays, isToday, isYesterday, isTomorrow, startOfToday } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { useAdmin, useAuth, useFirestore } from '@/firebase/provider';
 import { doc, onSnapshot, collection, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
@@ -174,15 +174,9 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
         if (todayRef.current && scrollerRef.current) {
             const scroller = scrollerRef.current;
             const todayButton = todayRef.current;
-            const scrollerRect = scroller.getBoundingClientRect();
-            const todayRect = todayButton.getBoundingClientRect();
-
-            // Calculate the scroll position to center the 'today' button
-            const scrollOffset = todayRect.left - scrollerRect.left - (scrollerRect.width / 2) + (todayRect.width / 2);
-            scroller.scrollTo({
-                left: scroller.scrollLeft + scrollOffset,
-                behavior: 'smooth'
-            });
+            
+            // This is a more direct way to center the element.
+            todayButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
     }, []); // Runs only once on mount to scroll to today
 
