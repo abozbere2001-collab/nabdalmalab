@@ -193,53 +193,49 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
         setTimeout(centerOnSelected, 100);
     }, [selectedDateKey]);
     
-    const selectedDayName = getDayLabel(new Date(selectedDateKey));
-
     return (
-        <div className="relative bg-card py-2 border-x border-b rounded-b-lg shadow-md flex flex-col items-center">
-            <h3 className="text-sm font-semibold mb-2 text-center text-primary">{selectedDayName}</h3>
-            <div className="flex items-center w-full px-1">
-                <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-9 w-9 z-10 flex-shrink-0"
-                    onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
-                >
-                    <ChevronRight className="h-5 w-5" />
-                </Button>
-                <ScrollArea ref={scrollerRef} className="w-full whitespace-nowrap mx-1">
-                    <div className="flex flex-row-reverse justify-start items-center h-9">
-                        {dates.map(date => {
-                            const dateKey = formatDateKey(date);
-                            const isSelected = dateKey === selectedDateKey;
+        <div className="relative bg-card py-2 border-x border-b rounded-b-lg shadow-md flex items-center w-full">
+            <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 z-10 flex-shrink-0"
+                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
+            >
+                <ChevronRight className="h-5 w-5" />
+            </Button>
+            <ScrollArea ref={scrollerRef} className="w-full whitespace-nowrap">
+                <div className="flex flex-row-reverse justify-start items-center h-12">
+                    {dates.map(date => {
+                        const dateKey = formatDateKey(date);
+                        const isSelected = dateKey === selectedDateKey;
 
-                            return (
-                                <button
-                                    key={dateKey}
-                                    ref={isSelected ? selectedButtonRef : null}
-                                    className={cn(
-                                        "relative flex items-center justify-center h-8 w-8 rounded-full transition-colors ml-2 flex-shrink-0",
-                                        "text-foreground/80 hover:text-primary",
-                                        isSelected && "bg-primary text-primary-foreground"
-                                    )}
-                                    onClick={() => onDateSelect(dateKey)}
-                                >
-                                    <span className="font-semibold text-sm">{format(date, 'd')}</span>
-                                </button>
-                            )
-                        })}
-                    </div>
-                    <ScrollBar orientation="horizontal" className="h-0" />
-                </ScrollArea>
-                <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-9 w-9 z-10 flex-shrink-0"
-                    onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
-                >
-                    <ChevronLeft className="h-5 w-5" />
-                </Button>
-            </div>
+                        return (
+                            <button
+                                key={dateKey}
+                                ref={isSelected ? selectedButtonRef : null}
+                                className={cn(
+                                    "flex flex-col items-center justify-center h-12 w-12 rounded-lg transition-colors ml-2 flex-shrink-0",
+                                    "text-foreground/80 hover:bg-accent/50",
+                                    isSelected && "bg-primary text-primary-foreground"
+                                )}
+                                onClick={() => onDateSelect(dateKey)}
+                            >
+                                <span className="text-[11px] font-medium">{format(date, "EEE", { locale: ar })}</span>
+                                <span className="font-bold text-lg">{format(date, 'd')}</span>
+                            </button>
+                        )
+                    })}
+                </div>
+                <ScrollBar orientation="horizontal" className="h-0" />
+            </ScrollArea>
+            <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 z-10 flex-shrink-0"
+                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
+            >
+                <ChevronLeft className="h-5 w-5" />
+            </Button>
         </div>
     );
 }
@@ -476,3 +472,5 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
+    
