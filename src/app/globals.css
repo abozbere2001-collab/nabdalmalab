@@ -88,6 +88,7 @@
     --input: 210 20% 90%;
     --ring: 0 84.2% 60.2%;
     --radius: 1.5rem;
+    /* Red & White Theme for Light Mode Nav Bars */
     --header-background: hsl(0 84.2% 60.2%); /* Red */
     --header-foreground: hsl(0 0% 100%); /* White */
     --date-scroller-background: hsl(0 84.2% 60.2%); /* Red */
