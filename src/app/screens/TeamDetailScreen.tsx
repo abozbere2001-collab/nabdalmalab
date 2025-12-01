@@ -29,7 +29,7 @@ import { format, isToday, startOfToday } from 'date-fns';
 import { ar } from 'date-fns/locale';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = process.env.NEXT_PUBLIC_API_FOOTBALL_KEY;
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
 
 interface TeamData {
     team: Team;
@@ -595,3 +595,5 @@ export function TeamDetailScreen({ navigate, goBack, canGoBack, teamId, leagueId
         </div>
     );
 }
+
+    

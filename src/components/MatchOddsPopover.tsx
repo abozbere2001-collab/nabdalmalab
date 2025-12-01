@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = process.env.NEXT_PUBLIC_API_FOOTBALL_KEY;
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
 
 interface OddValue {
     value: string;
@@ -161,3 +161,5 @@ export function MatchOddsPopover({ fixtureId }: { fixtureId: number }) {
         </Popover>
     );
 }
+
+    

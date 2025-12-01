@@ -24,7 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = process.env.NEXT_PUBLIC_API_FOOTBALL_KEY;
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
 
 interface GroupedFixtures {
     [leagueName: string]: {
@@ -190,7 +190,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-card py-2 border-x border-b rounded-b-lg shadow-md -mt-1">
+        <div className="bg-card py-1 border-x border-b rounded-b-lg shadow-md -mt-1">
             <ScrollArea className="w-full whitespace-nowrap">
                 <div ref={scrollerRef} className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map(date => {
@@ -201,15 +201,15 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isSelected ? selectedButtonRef : null}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center h-auto py-2 px-3 min-w-[50px] rounded-lg transition-colors",
+                                    "relative flex flex-col items-center justify-center h-auto py-1 px-3 min-w-[45px] rounded-lg transition-colors",
                                     "text-foreground/80 hover:bg-accent/50",
                                     isSelected && "bg-primary text-primary-foreground hover:bg-primary/90"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
-                                <span className="text-xs font-medium">{getDayLabel(date)}</span>
-                                <span className="font-bold text-lg">{format(date, 'd')}</span>
-                                <span className="text-[10px] uppercase">{format(date, 'MMM', { locale: ar })}</span>
+                                <span className="text-[10px] font-medium">{getDayLabel(date)}</span>
+                                <span className="font-bold text-base">{format(date, 'd')}</span>
+                                <span className="text-[9px] uppercase">{format(date, 'MMM', { locale: ar })}</span>
                             </button>
                         );
                     })}
@@ -452,7 +452,5 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
-
-    
 
     

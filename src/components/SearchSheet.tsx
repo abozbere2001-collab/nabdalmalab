@@ -29,7 +29,7 @@ import { hardcodedTranslations } from '@/lib/hardcoded-translations';
 import { getLocalFavorites, setLocalFavorites } from '@/lib/local-favorites';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = process.env.NEXT_PUBLIC_API_FOOTBALL_KEY;
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
 
 // --- Cache Logic ---
 const COMPETITIONS_CACHE_KEY = 'goalstack_all_competitions_cache_v1';
@@ -534,3 +534,5 @@ export function SearchSheet({ children, navigate, initialItemType, favorites, cu
     </Sheet>
   );
 }
+
+    

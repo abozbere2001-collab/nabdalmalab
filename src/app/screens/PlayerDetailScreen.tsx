@@ -17,6 +17,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { CURRENT_SEASON } from '@/lib/constants';
 import { Separator } from '@/components/ui/separator';
 
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+
 // --- TYPE DEFINITIONS ---
 interface PlayerInfo extends Player {
     birth: { date: string; place: string; country: string; };
@@ -270,3 +272,5 @@ export function PlayerDetailScreen({ navigate, goBack, canGoBack, playerId }: Sc
     </div>
   );
 }
+
+    

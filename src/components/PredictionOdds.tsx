@@ -9,7 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = process.env.NEXT_PUBLIC_API_FOOTBALL_KEY;
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
 
 interface OddValue {
     value: string;
@@ -149,3 +149,5 @@ export function PredictionOdds({ fixtureId, homeTeam, awayTeam, reversed = false
         </div>
     );
 }
+
+    
