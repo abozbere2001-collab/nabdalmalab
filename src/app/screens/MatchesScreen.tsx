@@ -179,11 +179,10 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             const scrollerRect = scroller.getBoundingClientRect();
             const selectedRect = selectedButton.getBoundingClientRect();
             
-            // For RTL, we calculate the scroll position differently
             const scrollOffset = (selectedRect.left - scrollerRect.left) - (scrollerRect.width / 2) + (selectedRect.width / 2);
             scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
         }
-    }, [selectedDateKey]);
+    }, [selectedDateKey, isTodaySelected]);
 
     return (
         <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[44px] flex items-center justify-center">
@@ -240,7 +239,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                         )
                     })}
                 </div>
-                 <ScrollBar orientation="horizontal" className="h-1.5 mt-2" />
+                 <ScrollBar orientation="horizontal" className="h-1" />
             </ScrollArea>
              <Button 
                 variant="ghost" 
