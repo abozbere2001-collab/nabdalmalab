@@ -1,5 +1,4 @@
 
-
 "use client";
 import { Star, Newspaper, MoreHorizontal, Shield, UserCircle2, Flag, Home, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -46,11 +45,13 @@ export function BottomNav({ activeScreen, onNavigate }: BottomNavProps) {
                 isActive ? 'text-bottom-nav-active' : 'text-bottom-nav-foreground hover:text-bottom-nav-active'
               )}
             >
-              <Icon className="h-6 w-6" />
-              <span>{label}</span>
-              {isActive && (
-                <div className="absolute bottom-1 h-1 w-6 rounded-full bg-bottom-nav-active" />
-              )}
+                <div className={cn(
+                    "flex h-8 w-12 items-center justify-center rounded-full transition-colors",
+                    isActive ? "bg-bottom-nav-active/20" : ""
+                )}>
+                    <Icon className="h-5 w-5" />
+                </div>
+              <span className={cn(isActive ? "font-bold" : "font-medium")}>{label}</span>
             </button>
           );
         })}
