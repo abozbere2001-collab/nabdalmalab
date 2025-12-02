@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { useEffect, useState, useMemo, useRef, useCallback, useLayoutEffect } from 'react';
@@ -205,17 +206,19 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                              <button
                                 key={dateKey}
                                 ref={isSelected ? selectedButtonRef : null}
-                                 className={cn(
-                                    "relative flex items-center justify-center px-3 min-w-[70px] h-9 rounded-lg transition-colors ml-2",
-                                    "text-[var(--date-scroller-foreground)] hover:bg-white/20",
-                                    isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
+                                className={cn(
+                                    "relative flex flex-col items-center justify-center px-3 min-w-[70px] h-[44px] transition-colors",
+                                    "text-[var(--date-scroller-foreground)] hover:bg-black/10 rounded-lg"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
-                               <span className="text-[11px] font-semibold flex items-center gap-1.5">
-                                    <span className="font-normal">{dayLabel}</span>
-                                    <span>{format(date, 'd')}</span>
-                                </span>
+                                <div className={cn(
+                                    "absolute inset-0 flex flex-col items-center justify-center rounded-full transition-all duration-200",
+                                    isSelected ? "bg-[var(--date-scroller-active-background)] text-[var(--date-scroller-active-foreground)]" : "bg-transparent"
+                                )}>
+                                    <span className="text-[11px] font-semibold">{dayLabel}</span>
+                                    <span className="font-bold text-sm">{format(date, 'd')}</span>
+                                </div>
                             </button>
                         )
                     })}
@@ -594,3 +597,4 @@ export function PredictionsScreen({ navigate, goBack, canGoBack, favorites, cust
         </div>
     );
 }
+

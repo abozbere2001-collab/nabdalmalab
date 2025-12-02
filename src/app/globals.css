@@ -1,4 +1,5 @@
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -64,8 +65,8 @@
     --header-foreground: hsl(220 15% 95%);
     --date-scroller-background: hsl(240 2% 12%);
     --date-scroller-foreground: hsl(220 15% 60%);
-    --date-scroller-active-background: hsl(140 70% 50%);
-    --date-scroller-active-foreground: hsl(140 90% 10%);
+    --date-scroller-active-background: hsl(140 70% 50%); /* Green circle */
+    --date-scroller-active-foreground: hsl(140 90% 10%); /* Dark text on green */
     --bottom-nav-background: hsl(240 2% 12%);
     --bottom-nav-foreground: hsl(220 15% 60%);
     --bottom-nav-active: hsl(140 70% 50%);
@@ -99,8 +100,8 @@
     
     --date-scroller-background: hsl(var(--primary)); /* Red */
     --date-scroller-foreground: hsl(0 0% 100% / 0.8); /* White with slight transparency */
-    --date-scroller-active-background: hsl(0 0% 100%); /* White */
-    --date-scroller-active-foreground: hsl(var(--primary)); /* Red */
+    --date-scroller-active-background: hsl(0 0% 100%); /* White circle */
+    --date-scroller-active-foreground: hsl(var(--primary)); /* Red text on white */
 
     --bottom-nav-background: hsl(var(--primary)); /* Red */
     --bottom-nav-foreground: hsl(0 0% 100% / 0.7); /* White transparent */
@@ -116,3 +117,4 @@
     @apply bg-background text-foreground/80;
   }
 }
+
