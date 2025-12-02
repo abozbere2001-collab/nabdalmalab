@@ -18,7 +18,7 @@ import { CURRENT_SEASON } from '@/lib/constants';
 import { Separator } from '@/components/ui/separator';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+const API_KEY = "e5cc7da36b2d056834aa64385f51c73f";
 
 // --- TYPE DEFINITIONS ---
 interface PlayerInfo extends Player {

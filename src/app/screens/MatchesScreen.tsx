@@ -25,7 +25,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+const API_KEY = "e5cc7da36b2d056834aa64385f51c73f";
 
 interface GroupedFixtures {
     [leagueName: string]: {
@@ -191,7 +191,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 variant="ghost" 
                 size="icon"
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
-                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
+                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
              >
                 <ChevronRight className="h-5 w-5" />
              </Button>
@@ -239,7 +239,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 variant="ghost" 
                 size="icon"
                 className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
-                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
+                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
              >
                 <ChevronLeft className="h-5 w-5" />
              </Button>

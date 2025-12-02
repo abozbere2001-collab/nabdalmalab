@@ -33,7 +33,7 @@ import { setLocalFavorites } from '@/lib/local-favorites';
 import { hardcodedTranslations } from '@/lib/hardcoded-translations';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+const API_KEY = "e5cc7da36b2d056834aa64385f51c73f";
 
 const CrownedTeamScroller = ({
   crownedTeams,

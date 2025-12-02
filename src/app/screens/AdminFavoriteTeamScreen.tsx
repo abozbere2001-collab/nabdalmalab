@@ -14,7 +14,7 @@ import { isMatchLive } from '@/lib/matchStatus';
 import { Card, CardContent } from '@/components/ui/card';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+const API_KEY = "e5cc7da36b2d056834aa64385f51c73f";
 
 // --- Main Screen Component ---
 export function AdminFavoriteTeamScreen({ navigate, goBack, canGoBack, teamId, teamName }: ScreenProps & { teamId: number; teamName: string; }) {

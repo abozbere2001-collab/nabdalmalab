@@ -29,7 +29,7 @@ import { hardcodedTranslations } from '@/lib/hardcoded-translations';
 import { getLocalFavorites, setLocalFavorites } from '@/lib/local-favorites';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+const API_KEY = "e5cc7da36b2d056834aa64385f51c73f";
 
 // --- Cache Logic ---
 const COMPETITIONS_CACHE_KEY = 'goalstack_all_competitions_cache_v1';
@@ -38,7 +38,7 @@ interface Cache<T> {
     data: T;
     timestamp: number;
 }
-const getCachedData = <T,>(key: string): T | null => {
+const getCachedData = <T>(key: string): T | null => {
     if (typeof window === 'undefined') return null;
     try {
         const cachedItem = localStorage.getItem(key);
