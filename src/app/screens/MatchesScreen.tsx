@@ -178,11 +178,10 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
         if (scroller && selectedButton) {
             const scrollerRect = scroller.getBoundingClientRect();
             const selectedRect = selectedButton.getBoundingClientRect();
-            // Calculate the scroll position to center the selected button
             const scrollOffset = selectedRect.left - scrollerRect.left - (scrollerRect.width / 2) + (selectedRect.width / 2);
             scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
         }
-    }, [selectedDateKey]); // Re-run when the selected date changes
+    }, [selectedDateKey]);
 
     return (
         <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[30px] flex items-center justify-center">
@@ -212,7 +211,13 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                     {dates.map(date => {
                         const dateKey = formatDateKey(date);
                         const isSelected = dateKey === selectedDateKey;
-                        const dayLabel = isToday(date) ? "اليوم" : isYesterday(date) ? "الأمس" : isTomorrow(date) ? "غداً" : format(date, "EEE", { locale: ar });
+                        
+                        let dayLabel: string;
+                        if (isToday(date)) dayLabel = "اليوم";
+                        else if (isYesterday(date)) dayLabel = "الأمس";
+                        else if (isTomorrow(date)) dayLabel = "غداً";
+                        else dayLabel = format(date, "EEEE", { locale: ar });
+
 
                         return (
                              <button

@@ -41,11 +41,11 @@ interface Cache<T> {
 const getCachedData = <T>(key: string): T | null => {
     if (typeof window === 'undefined') return null;
     try {
-        const cachedItem = localStorage.getItem(key);
-        if (!cachedItem) return null;
-        const { data, timestamp } = JSON.parse(cachedItem) as Cache<T>;
+        const cachedData = localStorage.getItem(key);
+        if (!cachedData) return null;
+        const parsed = JSON.parse(cachedData) as Cache<T>;
         // The cache check logic is in AllCompetitionsScreen, so we don't need it here.
-        return data;
+        return parsed.data;
     } catch (error) {
         return null;
     }

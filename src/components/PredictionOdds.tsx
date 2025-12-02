@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -9,7 +8,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
-const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+const API_KEY = "e5cc7da36b2d056834aa64385f51c73f";
 
 interface OddValue {
     value: string;
@@ -149,5 +148,3 @@ export function PredictionOdds({ fixtureId, homeTeam, awayTeam, reversed = false
         </div>
     );
 }
-
-    

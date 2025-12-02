@@ -189,7 +189,13 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                     {dates.map(date => {
                         const dateKey = formatDateKey(date);
                         const isSelected = dateKey === selectedDateKey;
-                        const dayLabel = isToday(date) ? "اليوم" : isYesterday(date) ? "الأمس" : isTomorrow(date) ? "غداً" : format(date, "EEE", { locale: ar });
+                        
+                        let dayLabel: string;
+                        if (isToday(date)) dayLabel = "اليوم";
+                        else if (isYesterday(date)) dayLabel = "الأمس";
+                        else if (isTomorrow(date)) dayLabel = "غداً";
+                        else dayLabel = format(date, "EEEE", { locale: ar });
+
 
                         return (
                              <button
