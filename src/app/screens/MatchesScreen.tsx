@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useRef, useCallback, useLayoutEffect } from 'react';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import type { ScreenProps } from '@/app/page';
@@ -168,21 +168,29 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     
     const scrollerRef = useRef<HTMLDivElement>(null);
     const selectedButtonRef = useRef<HTMLButtonElement>(null);
-    const isTodaySelected = selectedDateKey === formatDateKey(new Date());
 
-
-     useEffect(() => {
+     useLayoutEffect(() => {
         const scroller = scrollerRef.current;
         const selectedButton = selectedButtonRef.current;
 
         if (scroller && selectedButton) {
-            const scrollerRect = scroller.getBoundingClientRect();
-            const selectedRect = selectedButton.getBoundingClientRect();
-            
-            const scrollOffset = (selectedRect.left - scrollerRect.left) - (scrollerRect.width / 2) + (selectedRect.width / 2);
-            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
+            // Use a small timeout to ensure the DOM is ready for scrolling
+            const timeoutId = setTimeout(() => {
+                const scrollerRect = scroller.getBoundingClientRect();
+                const selectedRect = selectedButton.getBoundingClientRect();
+                
+                // Calculate the scroll position to center the selected button
+                const scrollOffset = selectedRect.left - scrollerRect.left - (scrollerRect.width / 2) + (selectedRect.width / 2);
+                
+                scroller.scrollTo({
+                    left: scroller.scrollLeft + scrollOffset,
+                    behavior: 'smooth'
+                });
+            }, 100);
+
+            return () => clearTimeout(timeoutId);
         }
-    }, [selectedDateKey, isTodaySelected]);
+    }, [selectedDateKey]);
 
     return (
         <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[44px] flex items-center justify-center">
@@ -195,7 +203,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 <ChevronLeft className="h-5 w-5" />
              </Button>
 
-            {!isTodaySelected && (
+            {!isToday(new Date(selectedDateKey)) && (
                 <Button 
                     variant="secondary"
                     size="sm"
