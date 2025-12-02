@@ -186,7 +186,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     }, [selectedDateKey]); // Re-run when the selected date changes
 
     return (
-        <div className="relative bg-[var(--date-scroller-background)] py-2 shadow-md h-[34px] flex items-center justify-center">
+        <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[30px] flex items-center justify-center">
              <Button 
                 variant="ghost" 
                 size="icon"
@@ -200,11 +200,11 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 <Button 
                     variant="secondary"
                     size="sm"
-                    className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-7 rounded-full z-20 bg-background/80 text-foreground border border-border backdrop-blur-sm animate-in fade-in zoom-in-95"
+                    className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-6 rounded-full z-20 bg-background/80 text-foreground border border-border backdrop-blur-sm animate-in fade-in zoom-in-95 px-2"
                     onClick={() => onDateSelect(formatDateKey(new Date()))}
                 >
-                    <CalendarClock className="h-4 w-4 ml-1" />
-                    العودة لليوم
+                    <CalendarClock className="h-3 w-3 ml-1" />
+                    <span className="text-xs">اليوم</span>
                 </Button>
             )}
 
