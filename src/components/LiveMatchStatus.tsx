@@ -15,6 +15,17 @@ const getRelativeDay = (date: Date) => {
     return format(date, "EEEE", { locale: ar });
 };
 
+const formatTo12Hour = (date: Date): string => {
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'م' : 'ص';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}:${minutesStr} ${ampm}`;
+};
+
+
 // Live Timer Component
 export const LiveMatchStatus = ({ fixture, large = false, customStatus }: { fixture: FixtureType, large?: boolean, customStatus?: string | null }) => {
     const { fixture: fixtureDetails, goals } = fixture;
@@ -67,7 +78,7 @@ export const LiveMatchStatus = ({ fixture, large = false, customStatus }: { fixt
             if (status.short === "TBD") return { main: "لم تحدد", sub: "", isLive: false };
             
             return {
-                main: format(fixtureDate, "HH:mm"),
+                main: formatTo12Hour(fixtureDate),
                 sub: getRelativeDay(fixtureDate),
                 isLive: false
             };
@@ -92,7 +103,7 @@ export const LiveMatchStatus = ({ fixture, large = false, customStatus }: { fixt
         }
         
         return {
-            main: format(fixtureDate, "HH:mm"),
+            main: formatTo12Hour(fixtureDate),
             sub: getRelativeDay(fixtureDate),
             isLive: false
         };
