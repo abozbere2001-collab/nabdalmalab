@@ -196,7 +196,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 ref={isToday(date) ? todayRef : null}
                                 className={cn(
                                     "relative flex flex-col items-center justify-center h-[30px] py-1 px-3 min-w-[50px] rounded-md transition-colors",
-                                    "text-[var(--date-scroller-foreground)] hover:bg-black/10",
+                                    "text-[var(--date-scroller-foreground)] hover:bg-white/10",
                                     isSelected && "bg-[var(--date-scroller-active-background)] text-[var(--date-scroller-active-foreground)] font-bold"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
