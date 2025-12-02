@@ -167,49 +167,62 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     }, []);
     
     const scrollerRef = useRef<HTMLDivElement>(null);
-    const todayRef = useRef<HTMLButtonElement>(null);
+    const selectedButtonRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        if (todayRef.current && scrollerRef.current) {
-            todayRef.current.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
-        }
-    }, []);
+        const scroller = scrollerRef.current;
+        const selectedButton = selectedButtonRef.current;
 
-    const getDayLabel = (date: Date) => {
-        if (isToday(date)) return "اليوم";
-        if (isYesterday(date)) return "الأمس";
-        if (isTomorrow(date)) return "غداً";
-        return format(date, "EEE", { locale: ar });
-    };
+        if (scroller && selectedButton) {
+            const scrollerRect = scroller.getBoundingClientRect();
+            const selectedRect = selectedButton.getBoundingClientRect();
+            // Calculate the scroll position to center the selected button
+            const scrollOffset = selectedRect.left - scrollerRect.left - (scrollerRect.width / 2) + (selectedRect.width / 2);
+            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
+        }
+    }, [selectedDateKey]); // Re-run when the selected date changes
 
     return (
-        <div className="bg-[var(--date-scroller-background)] py-1 shadow-md h-[38px] flex items-center">
-            <div ref={scrollerRef} className="flex-1 overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                <div className="flex w-max space-x-2 px-4 flex-row-reverse">
-                    {dates.map((date) => {
-                        const dateKey = formatDateKey(date);
-                        const isSelected = dateKey === selectedDateKey;
-                        
-                        return (
-                            <button
-                                key={dateKey}
-                                ref={isToday(date) ? todayRef : null}
-                                className={cn(
-                                    "relative flex flex-col items-center justify-center h-[30px] py-1 px-3 min-w-[50px] rounded-md transition-colors",
-                                    "text-[var(--date-scroller-foreground)] hover:bg-white/10",
-                                    isSelected && "bg-[var(--date-scroller-active-background)] text-[var(--date-scroller-active-foreground)] font-bold"
-                                )}
-                                onClick={() => onDateSelect(dateKey)}
-                            >
-                                <span className="font-bold text-xs">{getDayLabel(date)}</span>
-                                <span className="text-[10px] font-mono opacity-70">
-                                    {format(date, 'd/M')}
-                                </span>
-                            </button>
-                        );
-                    })}
-                </div>
+        <div className="relative bg-[var(--date-scroller-background)] py-2 shadow-md h-[38px] flex items-center justify-center">
+             <Button 
+                variant="ghost" 
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20"
+                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
+             >
+                <ChevronRight className="h-5 w-5" />
+             </Button>
+            <div ref={scrollerRef} className="flex-1 flex flex-row-reverse overflow-x-auto pb-1 px-10" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {dates.map(date => {
+                    const dateKey = formatDateKey(date);
+                    const isSelected = dateKey === selectedDateKey;
+                    const dayLabel = isToday(date) ? "اليوم" : isYesterday(date) ? "الأمس" : isTomorrow(date) ? "غداً" : format(date, "EEE", { locale: ar });
+
+                    return (
+                         <button
+                            key={dateKey}
+                            ref={isSelected ? selectedButtonRef : null}
+                            className={cn(
+                                "relative flex flex-col items-center justify-center h-auto py-1 px-2 min-w-[40px] rounded-lg transition-colors ml-2",
+                                "text-[var(--date-scroller-foreground)] hover:bg-white/20",
+                                isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
+                            )}
+                            onClick={() => onDateSelect(dateKey)}
+                        >
+                            <span className="text-[10px] font-normal">{dayLabel}</span>
+                            <span className="font-semibold text-sm">{format(date, 'd')}</span>
+                        </button>
+                    )
+                })}
             </div>
+             <Button 
+                variant="ghost" 
+                size="icon"
+                className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20"
+                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
+             >
+                <ChevronLeft className="h-5 w-5" />
+             </Button>
         </div>
     );
 }
@@ -453,3 +466,5 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
+    
