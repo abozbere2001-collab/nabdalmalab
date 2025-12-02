@@ -191,7 +191,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 variant="ghost" 
                 size="icon"
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
-                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
+                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
              >
                 <ChevronRight className="h-5 w-5" />
              </Button>
@@ -237,7 +237,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 variant="ghost" 
                 size="icon"
                 className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
-                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
+                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
              >
                 <ChevronLeft className="h-5 w-5" />
              </Button>
@@ -484,6 +484,8 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
+    
 
     
 
