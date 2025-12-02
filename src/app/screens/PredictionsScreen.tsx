@@ -156,12 +156,6 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
         if (scroller && selectedButton) {
             const scrollerRect = scroller.getBoundingClientRect();
             const selectedRect = selectedButton.getBoundingClientRect();
-            // Calculation for RTL:
-            // The goal is to center the selected button.
-            // selectedRect.right is the distance from the viewport's left edge to the button's right edge.
-            // scrollerRect.right is the distance from the viewport's left edge to the scroller's right edge.
-            // Difference gives the button's position relative to the scroller's right edge.
-            // We then adjust by half the scroller width and half the button width to center it.
             const scrollOffset = (selectedRect.right - scrollerRect.right) + (scrollerRect.width / 2) - (selectedRect.width / 2);
             scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
         }
@@ -222,7 +216,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                         )
                     })}
                 </div>
-                 <ScrollBar orientation="horizontal" className="h-0 p-0" />
+                 <ScrollBar orientation="horizontal" className="h-1.5 mt-2" />
             </ScrollArea>
              <Button 
                 variant="ghost" 
