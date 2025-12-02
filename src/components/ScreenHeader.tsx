@@ -26,7 +26,7 @@ export function ScreenHeader({ title, canGoBack, onBack, actions, secondaryActio
     <header data-id={`screen-header-${title.replace(/\s+/g, '-').toLowerCase()}`} 
     className={cn(
         "relative flex h-[48px] flex-shrink-0 items-center justify-between p-1 z-30",
-        "bg-header text-header-foreground shadow-md rounded-b-lg"
+        "bg-header text-header-foreground shadow-md"
     )}>
       <div className="flex items-center gap-1">
          <NabdAlMalaebLogo className="h-6 mr-1 ml-1" />
