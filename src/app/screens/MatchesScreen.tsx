@@ -201,8 +201,8 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
-                                <span className="font-bold text-sm">{getDayLabel(date)}</span>
-                                <span className="absolute top-0 right-0.5 text-[8px] font-mono opacity-70">
+                                <span className="font-bold text-xs">{getDayLabel(date)}</span>
+                                <span className="text-[10px] font-mono opacity-70">
                                     {format(date, 'd/M')}
                                 </span>
                             </button>
