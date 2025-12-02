@@ -98,7 +98,7 @@
     --header-foreground: hsl(var(--primary-foreground)); /* White */
     
     --date-scroller-background: hsl(var(--primary)); /* Red */
-    --date-scroller-foreground: hsl(0 0% 100% / 0.8); /* White transparent */
+    --date-scroller-foreground: hsl(0 0% 100% / 0.7); /* White transparent */
     --date-scroller-active-background: hsl(0 0% 100%); /* White */
     --date-scroller-active-foreground: hsl(var(--primary)); /* Red */
 

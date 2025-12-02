@@ -183,7 +183,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     };
 
     return (
-        <div className="bg-date-scroller-background py-1 shadow-md h-[38px] flex items-center">
+        <div className="bg-[var(--date-scroller-background)] py-1 shadow-md h-[38px] flex items-center">
             <div ref={scrollerRef} className="flex-1 overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 <div className="flex w-max space-x-2 px-4 flex-row-reverse">
                     {dates.map((date) => {
@@ -196,8 +196,8 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 ref={isToday(date) ? todayRef : null}
                                 className={cn(
                                     "relative flex flex-col items-center justify-center h-[30px] py-1 px-3 min-w-[50px] rounded-md transition-colors",
-                                    "text-date-scroller-foreground hover:bg-white/20",
-                                    isSelected && "bg-date-scroller-active-background text-date-scroller-active-foreground font-bold"
+                                    "text-[var(--date-scroller-foreground)] hover:bg-black/10",
+                                    isSelected && "bg-[var(--date-scroller-active-background)] text-[var(--date-scroller-active-foreground)] font-bold"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
