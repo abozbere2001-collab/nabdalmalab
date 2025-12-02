@@ -149,7 +149,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     const isTodaySelected = selectedDateKey === formatDateKey(new Date());
 
 
-    useEffect(() => {
+     useEffect(() => {
         const scroller = scrollerRef.current;
         const selectedButton = selectedButtonRef.current;
 
@@ -157,12 +157,12 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             const scrollerRect = scroller.getBoundingClientRect();
             const selectedRect = selectedButton.getBoundingClientRect();
             const scrollOffset = (selectedRect.left - scrollerRect.left) - (scrollerRect.width / 2) + (selectedRect.width / 2);
-            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
+            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'auto' });
         }
     }, [selectedDateKey]);
 
     return (
-        <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[30px] flex items-center justify-center">
+        <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[44px] flex items-center justify-center">
              <Button 
                 variant="ghost" 
                 size="icon"

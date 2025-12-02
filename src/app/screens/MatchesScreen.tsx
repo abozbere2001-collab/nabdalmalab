@@ -171,7 +171,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     const isTodaySelected = selectedDateKey === formatDateKey(new Date());
 
 
-    useEffect(() => {
+     useEffect(() => {
         const scroller = scrollerRef.current;
         const selectedButton = selectedButtonRef.current;
 
@@ -181,12 +181,12 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             
             // For RTL, the logic is slightly different
             const scrollOffset = (selectedRect.left - scrollerRect.left) - (scrollerRect.width / 2) + (selectedRect.width / 2);
-            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
+            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'auto' });
         }
-    }, [selectedDateKey]);
+    }, [selectedDateKey]); // Only run when the selected date changes.
 
     return (
-        <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[30px] flex items-center justify-center">
+        <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[44px] flex items-center justify-center">
              <Button 
                 variant="ghost" 
                 size="icon"
@@ -209,7 +209,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             )}
 
             <ScrollArea dir="rtl" className="w-full h-full">
-                <div ref={scrollerRef} className="flex flex-row items-center h-full px-10">
+                <div ref={scrollerRef} className="flex flex-row-reverse items-center h-full px-10">
                     {dates.map(date => {
                         const dateKey = formatDateKey(date);
                         const isSelected = dateKey === selectedDateKey;
@@ -240,7 +240,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                         )
                     })}
                 </div>
-                <ScrollBar orientation="horizontal" className="h-1.5 mt-2" />
+                 <ScrollBar orientation="horizontal" className="h-1.5 mt-2" />
             </ScrollArea>
              <Button 
                 variant="ghost" 
