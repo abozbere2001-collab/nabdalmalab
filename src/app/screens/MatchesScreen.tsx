@@ -175,40 +175,24 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
      useLayoutEffect(() => {
         const scroller = scrollerRef.current;
         const selectedButton = selectedButtonRef.current;
-
         if (scroller && selectedButton) {
             const timeoutId = setTimeout(() => {
                 const scrollerRect = scroller.getBoundingClientRect();
                 const selectedRect = selectedButton.getBoundingClientRect();
-                
                 const scrollOffset = selectedRect.left - scrollerRect.left - (scrollerRect.width / 2) + (selectedRect.width / 2);
-                
-                scroller.scrollTo({
-                    left: scroller.scrollLeft + scrollOffset,
-                    behavior: 'smooth'
-                });
+                scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
             }, 100);
-
             return () => clearTimeout(timeoutId);
         }
     }, [selectedDateKey]);
 
     return (
         <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[44px] flex items-center justify-center">
-             <Button 
-                variant="ghost" 
-                size="icon"
-                className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
-                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
-             >
-                <ChevronLeft className="h-5 w-5" />
-             </Button>
-
             {!isTodaySelected && (
                 <Button 
                     variant="secondary"
                     size="sm"
-                    className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-6 rounded-full z-20 bg-background/80 text-foreground border border-border backdrop-blur-sm animate-in fade-in zoom-in-95 px-2"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 h-7 rounded-full z-20 bg-background/80 text-foreground border border-border backdrop-blur-sm animate-in fade-in zoom-in-95 px-2"
                     onClick={() => onDateSelect(formatDateKey(new Date()))}
                 >
                     <CalendarClock className="h-3 w-3 ml-1" />
@@ -217,7 +201,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             )}
 
             <ScrollArea dir="rtl" className="w-full h-full">
-                <div ref={scrollerRef} className="flex flex-row-reverse items-center h-full px-10">
+                <div ref={scrollerRef} className="flex flex-row-reverse items-center h-full px-4">
                     {dates.map(date => {
                         const dateKey = formatDateKey(date);
                         const isSelected = dateKey === selectedDateKey;
@@ -233,19 +217,18 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                              <button
                                 key={dateKey}
                                 ref={isSelected ? selectedButtonRef : null}
-                                className={cn(
-                                    "relative flex flex-col items-center justify-center px-3 min-w-[70px] h-[44px] transition-colors text-[var(--date-scroller-foreground)] hover:bg-black/10 rounded-lg"
-                                )}
+                                className="relative flex items-center justify-center px-3 min-w-[70px] h-[44px] transition-colors text-[var(--date-scroller-foreground)] hover:bg-black/10 rounded-lg"
                                 onClick={() => onDateSelect(dateKey)}
                             >
                                 <div
                                     className={cn(
-                                        "w-full h-full flex flex-row items-center justify-center gap-1.5 rounded-full transition-colors duration-200",
-                                        isSelected && "bg-[var(--date-scroller-active-background)] text-[var(--date-scroller-active-foreground)]"
+                                        "w-full flex flex-row items-center justify-center gap-1.5 rounded-full transition-colors duration-200",
+                                        isSelected && "font-bold text-[var(--date-scroller-active-foreground)]"
                                     )}
                                 >
-                                    <span className="text-[11px] font-semibold">{dayLabel}</span>
-                                    <span className="font-bold text-sm">{format(date, 'd')}</span>
+                                    {isSelected && <div className="absolute inset-0 h-[36px] w-[36px] mx-auto my-auto bg-[var(--date-scroller-active-background)] rounded-full z-0" />}
+                                    <span className="text-[11px] z-10">{dayLabel}</span>
+                                    <span className="text-sm z-10">{format(date, 'd')}</span>
                                 </div>
                             </button>
                         )
@@ -253,14 +236,6 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 </div>
                  <ScrollBar orientation="horizontal" className="h-1" />
             </ScrollArea>
-             <Button 
-                variant="ghost" 
-                size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
-                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
-             >
-                <ChevronRight className="h-5 w-5" />
-             </Button>
         </div>
     );
 }
@@ -504,5 +479,6 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
 
 
