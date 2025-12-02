@@ -7,8 +7,8 @@ import type { ScreenProps } from '@/app/page';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAdmin, useFirestore } from '@/firebase';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import { Loader2, Users, Trophy, Shield } from 'lucide-react';
+import { collection, getDocs, doc, getDoc, collectionGroup, query } from 'firebase/firestore';
+import { Loader2, Users, Trophy, ThumbsUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -52,6 +52,7 @@ export function AdminDashboardScreen({ navigate, goBack, canGoBack }: ScreenProp
     const { db } = useFirestore();
     
     const [totalUsers, setTotalUsers] = useState(0);
+    const [totalPredictions, setTotalPredictions] = useState(0);
     const [teamFollows, setTeamFollows] = useState<Stat[]>([]);
     const [leagueFollows, setLeagueFollows] = useState<Stat[]>([]);
     const [loading, setLoading] = useState(true);
@@ -92,6 +93,12 @@ export function AdminDashboardScreen({ navigate, goBack, canGoBack }: ScreenProp
                     }
                 }
                 
+                // 3. Aggregate total predictions from subcollections
+                const predictionsQuery = query(collectionGroup(db, 'userPredictions'));
+                const predictionsSnapshot = await getDocs(predictionsQuery);
+                setTotalPredictions(predictionsSnapshot.size);
+
+
                 const toSortedStats = (counts: { [key: string]: number }) => Object.entries(counts)
                     .map(([name, count]) => ({ name, count }))
                     .sort((a, b) => b.count - a.count);
@@ -136,7 +143,7 @@ export function AdminDashboardScreen({ navigate, goBack, canGoBack }: ScreenProp
         <div className="flex h-full flex-col bg-background">
             <ScreenHeader title="لوحة التحكم" onBack={goBack} canGoBack={true} />
             <ScrollArea className="flex-1">
-                <div className="p-4 space-y-4">
+                <div className="p-4 grid grid-cols-2 gap-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">إجمالي المستخدمين</CardTitle>
@@ -144,12 +151,24 @@ export function AdminDashboardScreen({ navigate, goBack, canGoBack }: ScreenProp
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{totalUsers}</div>
-                            <p className="text-xs text-muted-foreground">إجمالي عدد الحسابات المسجلة في التطبيق.</p>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">إجمالي التوقعات</CardTitle>
+                            <ThumbsUp className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{totalPredictions}</div>
                         </CardContent>
                     </Card>
 
-                    <SimpleBarChart data={teamFollows.slice(0, 15)} title="أكثر 15 فريقًا متابعةً" />
-                    <SimpleBarChart data={leagueFollows.slice(0, 15)} title="أكثر 15 بطولة متابعةً" />
+                    <div className="col-span-2">
+                        <SimpleBarChart data={teamFollows.slice(0, 15)} title="أكثر 15 فريقًا متابعةً" />
+                    </div>
+                     <div className="col-span-2">
+                        <SimpleBarChart data={leagueFollows.slice(0, 15)} title="أكثر 15 بطولة متابعةً" />
+                    </div>
                 </div>
             </ScrollArea>
         </div>

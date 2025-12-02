@@ -76,13 +76,29 @@
     "providers": ["password", "anonymous"]
   },
   "firestore": {
-    "structure": [
-      { "path": "/users/{userId}", "definition": { "entityName": "User", "schema": { "$ref": "#/backend/entities/User" } } },
-      { "path": "/matches/{matchId}", "definition": { "entityName": "Match", "schema": { "$ref": "#/backend/entities/Match" } } },
-      { "path": "/competitions/{competitionId}", "definition": { "entityName": "Competition", "schema": { "$ref": "#/backend/entities/Competition" } } },
-      { "path": "/teams/{teamId}", "definition": { "entityName": "Team", "schema": { "$ref": "#/backend/entities/Team" } } },
-      { "path": "/news/{newsId}", "definition": { "entityName": "News", "schema": { "$ref": "#/backend/entities/News" } } },
-      { "path": "/admins/{adminId}", "definition": { "entityName": "Admin", "schema": { "$ref": "#/backend/entities/Admin" } } }
-    ]
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user profile information."
+    },
+    "/matches/{matchId}": {
+      "schema": { "$ref": "#/entities/Match" },
+      "description": "Stores individual match data."
+    },
+    "/competitions/{competitionId}": {
+      "schema": { "$ref": "#/entities/Competition" },
+      "description": "Stores data for each competition."
+    },
+    "/teams/{teamId}": {
+      "schema": { "$ref": "#/entities/Team" },
+      "description": "Stores team information."
+    },
+    "/news/{newsId}": {
+      "schema": { "$ref": "#/entities/News" },
+      "description": "Stores news articles."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/Admin" },
+      "description": "Defines users with administrative privileges."
+    }
   }
 }
