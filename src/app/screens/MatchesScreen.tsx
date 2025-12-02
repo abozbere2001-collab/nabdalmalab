@@ -183,7 +183,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     }, [selectedDateKey]); // Re-run when the selected date changes
 
     return (
-        <div className="relative bg-[var(--date-scroller-background)] py-2 shadow-md h-[38px] flex items-center justify-center">
+        <div className="relative bg-[var(--date-scroller-background)] py-2 shadow-md h-[34px] flex items-center justify-center">
              <Button 
                 variant="ghost" 
                 size="icon"
@@ -203,14 +203,14 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                             key={dateKey}
                             ref={isSelected ? selectedButtonRef : null}
                             className={cn(
-                                "relative flex flex-col items-center justify-center h-auto py-1 px-2 min-w-[40px] rounded-lg transition-colors ml-2",
+                                "relative flex flex-col items-center justify-center h-auto py-0 px-2 min-w-[38px] rounded-lg transition-colors ml-2",
                                 "text-[var(--date-scroller-foreground)] hover:bg-white/20",
                                 isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
                             )}
                             onClick={() => onDateSelect(dateKey)}
                         >
-                            <span className="text-[10px] font-normal">{dayLabel}</span>
-                            <span className="font-semibold text-sm">{format(date, 'd')}</span>
+                            <span className="text-[9px] font-normal">{dayLabel}</span>
+                            <span className="font-semibold text-xs">{format(date, 'd')}</span>
                         </button>
                     )
                 })}
@@ -466,5 +466,3 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
-
-    
