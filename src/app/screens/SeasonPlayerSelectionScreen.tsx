@@ -17,7 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FootballIcon } from '@/components/icons/FootballIcon';
-import { FixedSizeList as List } from 'react-window';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { hardcodedTranslations } from '@/lib/hardcoded-translations';
 
 const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
@@ -189,27 +189,8 @@ export function SeasonPlayerSelectionScreen({ navigate, goBack, canGoBack, heade
             });
 
     }, [stagedTopScorerId, privatePredictionDocRef, user, db, leagueId, leagueName, hasPredictionBeenSaved, toast]);
-
-
-    const Row = ({ index, style }: { index: number, style: React.CSSProperties }) => {
-        const playerResponse = players[index];
-        if (!playerResponse) return null;
-        const { player } = playerResponse;
-
-        return (
-             <div style={style} className="px-4 py-1">
-                <PlayerListItem
-                    player={player}
-                    isPredictedTopScorer={stagedTopScorerId === player.id}
-                    onScorerSelect={handleStagingSelect}
-                    disabled={hasPredictionBeenSaved && stagedTopScorerId !== player.id}
-                />
-            </div>
-        )
-    };
     
     const showSaveButton = !hasPredictionBeenSaved && stagedTopScorerId !== undefined;
-
 
     if (loading) {
         return (
@@ -230,20 +211,27 @@ export function SeasonPlayerSelectionScreen({ navigate, goBack, canGoBack, heade
                         : 'اختر الهداف المتوقع للدوري بالضغط على أيقونة الكرة.'}
                 </p>
             </div>
-            <div className="flex-1 overflow-y-auto">
+            <ScrollArea className="flex-1">
+                <div className="p-4 space-y-2">
                 {players.length > 0 ? (
-                     <List
-                        height={window.innerHeight - (showSaveButton ? 220 : 150)}
-                        itemCount={players.length}
-                        itemSize={76} // The height of each PlayerListItem + padding
-                        width="100%"
-                    >
-                        {Row}
-                    </List>
+                     players.map(playerResponse => {
+                        const { player } = playerResponse;
+                        if (!player) return null;
+                        return (
+                            <PlayerListItem
+                                key={player.id}
+                                player={player}
+                                isPredictedTopScorer={stagedTopScorerId === player.id}
+                                onScorerSelect={handleStagingSelect}
+                                disabled={hasPredictionBeenSaved && stagedTopScorerId !== player.id}
+                            />
+                        );
+                    })
                 ) : (
                     <p className="text-center pt-8 text-muted-foreground">لا يوجد لاعبون متاحون لهذا الفريق.</p>
                 )}
-            </div>
+                </div>
+            </ScrollArea>
 
             {showSaveButton && (
                 <div className="p-4 border-t bg-background/90 backdrop-blur-sm sticky bottom-0">
@@ -255,5 +243,3 @@ export function SeasonPlayerSelectionScreen({ navigate, goBack, canGoBack, heade
         </div>
     );
 }
-
-    
