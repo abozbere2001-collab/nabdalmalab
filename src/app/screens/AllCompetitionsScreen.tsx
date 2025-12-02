@@ -136,6 +136,50 @@ export function AllCompetitionsScreen({ navigate, goBack, canGoBack, favorites, 
     const [loadingClubData, setLoadingClubData] = useState(false);
     const [loadingNationalTeams, setLoadingNationalTeams] = useState(false);
     
+    const [followerCounts, setFollowerCounts] = useState<{ teams: Map<number, number>; leagues: Map<number, number> } | null>(null);
+    const [loadingFollowerCounts, setLoadingFollowerCounts] = useState(false);
+
+    useEffect(() => {
+        if (!isAdmin || !db) return;
+
+        const fetchCounts = async () => {
+            setLoadingFollowerCounts(true);
+            const teamCounts = new Map<number, number>();
+            const leagueCounts = new Map<number, number>();
+
+            try {
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                for (const userDoc of usersSnapshot.docs) {
+                    const favoritesDocRef = doc(db, 'users', userDoc.id, 'favorites', 'data');
+                    const favoritesSnapshot = await getDoc(favoritesDocRef);
+                    
+                    if (favoritesSnapshot.exists()) {
+                        const favoritesData = favoritesSnapshot.data() as Favorites;
+                        if (favoritesData.teams) {
+                            Object.keys(favoritesData.teams).forEach(teamId => {
+                                const id = Number(teamId);
+                                teamCounts.set(id, (teamCounts.get(id) || 0) + 1);
+                            });
+                        }
+                        if (favoritesData.leagues) {
+                            Object.keys(favoritesData.leagues).forEach(leagueId => {
+                                const id = Number(leagueId);
+                                leagueCounts.set(id, (leagueCounts.get(id) || 0) + 1);
+                            });
+                        }
+                    }
+                }
+                setFollowerCounts({ teams: teamCounts, leagues: leagueCounts });
+            } catch (error) {
+                console.error("Failed to fetch follower counts:", error);
+            } finally {
+                setLoadingFollowerCounts(false);
+            }
+        };
+
+        fetchCounts();
+    }, [isAdmin, db]);
+    
     const getName = useCallback((type: 'league' | 'team' | 'country' | 'continent', id: string | number, defaultName: string) => {
         if (!customNames || !id) return defaultName || '';
         const mapKey = type === 'league' ? 'leagues' : type === 'team' ? 'teams' : type === 'country' ? 'countries' : 'continents';
@@ -414,6 +458,7 @@ export function AllCompetitionsScreen({ navigate, goBack, canGoBack, favorites, 
                      const isStarred = !!favorites?.teams?.[team.id];
                      const isCrowned = !!favorites?.crownedTeams?.[team.id];
                      const countryName = team.country || team.name;
+                     const count = followerCounts?.teams.get(team.id);
                      return (
                          <li key={team.id} className="flex w-full items-center justify-between p-3 h-12 hover:bg-accent/80 transition-colors rounded-md">
                            <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => navigate('TeamDetails', { teamId: team.id })}>
@@ -421,6 +466,12 @@ export function AllCompetitionsScreen({ navigate, goBack, canGoBack, favorites, 
                              <span className="text-sm truncate">{team.name}</span>
                            </div>
                            <div className="flex items-center gap-1">
+                             {isAdmin && count !== undefined && (
+                               <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                   <Users className="h-3 w-3" />
+                                   <span>{count}</span>
+                               </div>
+                             )}
                              {isAdmin && (
                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleOpenRename('country', countryName, getName('country', countryName, countryName), countryName) }}>
                                  <Pencil className="h-4 w-4 text-muted-foreground/80" />
@@ -480,17 +531,20 @@ export function AllCompetitionsScreen({ navigate, goBack, canGoBack, favorites, 
                                     )}
                                 </div>
                                 <AccordionContent className="p-1">
-                                    {sortedGroupedCompetitions[continent][country].map(({ league }) => (
-                                        <LeagueHeaderItem
-                                            key={league.id}
-                                            league={{leagueId: league.id, name: getName('league', league.id, league.name), logo: league.logo, countryName: country}}
-                                            isFavorited={!!favorites?.leagues?.[league.id]}
-                                            onFavoriteToggle={() => handleFavoriteToggle(league, 'leagues')}
-                                            onRename={() => handleOpenRename('league', league.id, getName('league', league.id, league.name), league.name)}
-                                            onClick={() => navigate('CompetitionDetails', { title: getName('league', league.id, league.name), leagueId: league.id, logo: league.logo })}
-                                            isAdmin={isAdmin}
-                                        />
-                                    ))}
+                                    {sortedGroupedCompetitions[continent][country].map(({ league }) => {
+                                        const count = followerCounts?.leagues.get(league.id);
+                                        return (
+                                            <LeagueHeaderItem
+                                                key={league.id}
+                                                league={{leagueId: league.id, name: getName('league', league.id, league.name), logo: league.logo, countryName: country}}
+                                                isFavorited={!!favorites?.leagues?.[league.id]}
+                                                onFavoriteToggle={() => handleFavoriteToggle(league, 'leagues')}
+                                                onRename={() => handleOpenRename('league', league.id, getName('league', league.id, league.name), league.name)}
+                                                onClick={() => navigate('CompetitionDetails', { title: getName('league', league.id, league.name), leagueId: league.id, logo: league.logo })}
+                                                isAdmin={isAdmin}
+                                                followerCount={count}
+                                            />
+                                    )})}
                                 </AccordionContent>
                              </AccordionItem>
                         ))}
@@ -593,3 +647,4 @@ export function AllCompetitionsScreen({ navigate, goBack, canGoBack, favorites, 
 }
 
     
+

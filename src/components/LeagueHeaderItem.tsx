@@ -1,10 +1,11 @@
 
+
 "use client";
 
 import React from 'react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Star, Pencil } from 'lucide-react';
+import { Star, Pencil, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ManagedCompetition } from '@/lib/types';
 
@@ -15,9 +16,10 @@ interface LeagueHeaderItemProps {
     onClick: () => void;
     isAdmin: boolean;
     onRename: () => void;
+    followerCount?: number;
 }
 
-export function LeagueHeaderItem({ league, isFavorited, onFavoriteToggle, onClick, isAdmin, onRename }: LeagueHeaderItemProps) {
+export function LeagueHeaderItem({ league, isFavorited, onFavoriteToggle, onClick, isAdmin, onRename, followerCount }: LeagueHeaderItemProps) {
     return (
         <li className="flex w-full items-center justify-between p-3 h-12 hover:bg-accent/80 transition-colors rounded-md bg-card border">
             <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={onClick}>
@@ -27,6 +29,12 @@ export function LeagueHeaderItem({ league, isFavorited, onFavoriteToggle, onClic
                 <span className="text-sm truncate font-bold">{league.name}</span>
             </div>
             <div className="flex items-center gap-1">
+                 {isAdmin && followerCount !== undefined && (
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Users className="h-3 w-3" />
+                        <span>{followerCount}</span>
+                    </div>
+                )}
                 {isAdmin && (
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); onRename(); }}>
                         <Pencil className="h-4 w-4 text-muted-foreground/80" />
