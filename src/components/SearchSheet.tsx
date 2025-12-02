@@ -36,15 +36,16 @@ const COMPETITIONS_CACHE_KEY = 'goalstack_all_competitions_cache_v1';
 const TEAMS_CACHE_KEY = 'goalstack_national_teams_cache_v1';
 interface Cache<T> {
     data: T;
-    lastFetched: number;
+    timestamp: number;
 }
-const getCachedData = <T>(key: string): T | null => {
+const getCachedData = <T,>(key: string): T | null => {
     if (typeof window === 'undefined') return null;
     try {
-        const cachedData = localStorage.getItem(key);
-        if (!cachedData) return null;
-        const parsed = JSON.parse(cachedData) as Cache<T>;
-        return parsed.data;
+        const cachedItem = localStorage.getItem(key);
+        if (!cachedItem) return null;
+        const { data, timestamp } = JSON.parse(cachedItem) as Cache<T>;
+        // The cache check logic is in AllCompetitionsScreen, so we don't need it here.
+        return data;
     } catch (error) {
         return null;
     }
@@ -534,5 +535,3 @@ export function SearchSheet({ children, navigate, initialItemType, favorites, cu
     </Sheet>
   );
 }
-
-    
