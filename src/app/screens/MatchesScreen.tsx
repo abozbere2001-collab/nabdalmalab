@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
@@ -163,7 +164,6 @@ const formatDateKey = (date: Date): string => format(date, 'yyyy-MM-dd');
 const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: string, onDateSelect: (dateKey: string) => void}) => {
     const dates = useMemo(() => {
         const today = new Date();
-        // Generate 365 days past and 365 days future
         return Array.from({ length: 731 }, (_, i) => addDays(today, i - 365));
     }, []);
     
@@ -172,10 +172,9 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
 
     useEffect(() => {
         if (todayRef.current && scrollerRef.current) {
-            // The magic line that centers the element
             todayRef.current.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
         }
-    }, []); // Empty dependency array ensures this runs only once on mount
+    }, []);
 
     const getDayLabel = (date: Date) => {
         if (isToday(date)) return "اليوم";
@@ -216,6 +215,9 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     );
 }
 
+// Global cache outside the component to persist across re-renders and tab switches
+const matchesCache = new Map<string, FixtureType[]>();
+
 // Main Screen Component
 export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorites, customNames, setFavorites, onCustomNameChange }: ScreenProps & { isVisible: boolean, setFavorites: React.Dispatch<React.SetStateAction<Partial<Favorites>>>, onCustomNameChange: () => Promise<void> }) {
   const { user } = useAuth();
@@ -225,7 +227,8 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
   
   const [selectedDateKey, setSelectedDateKey] = useState<string>(formatDateKey(new Date()));
   
-  const [matchesCache, setMatchesCache] = useState<Map<string, FixtureType[]>>(new Map());
+  // Use a state to trigger re-renders when the cache is updated.
+  const [cacheVersion, setCacheVersion] = useState(0);
   const [loading, setLoading] = useState(true);
     
   const [pinnedPredictionMatches, setPinnedPredictionMatches] = useState(new Set<number>());
@@ -306,12 +309,14 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
                 }
             }));
             
-            setMatchesCache(prev => new Map(prev).set(dateKey, processedFixtures));
+            matchesCache.set(dateKey, processedFixtures);
+            setCacheVersion(v => v + 1);
 
         } catch (error: any) {
             if (error.name !== 'AbortError') {
                 console.error(`Failed to fetch data for ${dateKey}:`, error);
-                setMatchesCache(prev => new Map(prev).set(dateKey, [])); // Cache empty array on error
+                matchesCache.set(dateKey, []); // Cache empty array on error
+                setCacheVersion(v => v + 1);
             }
         } finally {
             if (!abortSignal.aborted) setLoading(false);
@@ -355,13 +360,14 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
                 } : oldFixture;
             });
             
-            setMatchesCache(prev => new Map(prev).set(dateKey, newFixtures));
+            matchesCache.set(dateKey, newFixtures);
+            setCacheVersion(v => v + 1);
 
         } catch (error: any) {
             if (error.name !== 'AbortError') console.error("Live update failed:", error);
         }
 
-    }, [matchesCache, getDisplayName]);
+    }, [getDisplayName]);
 
   
   useEffect(() => {
@@ -386,7 +392,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
           clearInterval(interval);
       };
 
-  }, [selectedDateKey, isVisible, customNames, matchesCache, fetchAndProcessData, updateLiveData]);
+  }, [selectedDateKey, isVisible, customNames, fetchAndProcessData, updateLiveData]);
 
 
   const handleDateChange = (dateKey: string) => {

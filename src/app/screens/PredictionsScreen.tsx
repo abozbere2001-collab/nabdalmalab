@@ -368,6 +368,12 @@ export function PredictionsScreen({ navigate, goBack, canGoBack, favorites, cust
             }
 
             const fixtureIds = pinnedFixturesSnapshot.docs.map(doc => doc.id);
+            if (fixtureIds.length === 0) {
+                 toast({ title: 'لا توجد مباريات', description: 'لا توجد مباريات مثبتة لاحتساب نقاطها.' });
+                setIsUpdatingPoints(false);
+                return;
+            }
+
             const apiFixturePromises = fixtureIds.map(id => fetch(`https://${API_FOOTBALL_HOST}/fixtures?id=${id}`, { headers: { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY } }).then(res => res.json()));
             const apiFixtureResults = await Promise.all(apiFixturePromises);
             

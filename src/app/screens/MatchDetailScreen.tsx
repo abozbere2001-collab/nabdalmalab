@@ -752,6 +752,11 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
         };
 
         const fetchStandings = async () => {
+            if (!fixture.league?.id) {
+                setLoadingStandings(false);
+                setStandings([]);
+                return;
+            }
             setLoadingStandings(true);
             try {
                 const response = await fetch(`https://${API_FOOTBALL_HOST}/standings?league=${fixture.league.id}&season=${fixture.league.season}`, { 
@@ -761,7 +766,7 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
                 if (signal.aborted) return;
-                setStandings(data.response[0]?.league?.standings?.[0] || null);
+                setStandings(data.response[0]?.league?.standings?.[0] || []);
             } catch (error) {
                 if (!signal.aborted) console.error("Could not fetch standings:", error);
             } finally {
