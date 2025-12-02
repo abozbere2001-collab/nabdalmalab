@@ -15,7 +15,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-auto items-center justify-center rounded-none border-b bg-header p-0 text-header-foreground",
+      "inline-flex h-auto items-center justify-center rounded-none border-b bg-background p-0 text-foreground",
       className
     )}
     {...props}
@@ -30,13 +30,13 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "relative group inline-flex items-center justify-center whitespace-nowrap px-3 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-header-foreground/70 data-[state=active]:text-header-foreground data-[state=active]:font-bold",
+      "relative group inline-flex items-center justify-center whitespace-nowrap px-3 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-muted-foreground data-[state=active]:text-foreground data-[state=active]:font-bold",
       className
     )}
     {...props}
   >
     {props.children}
-    <span className="absolute bottom-0 left-0 h-0.5 w-full scale-x-0 rounded-full bg-header-foreground transition-transform duration-300 ease-out group-data-[state=active]:scale-x-100" />
+    <span className="absolute bottom-0 left-0 h-0.5 w-full scale-x-0 rounded-full bg-primary transition-transform duration-300 ease-out group-data-[state=active]:scale-x-100" />
   </TabsPrimitive.Trigger>
 ))
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
