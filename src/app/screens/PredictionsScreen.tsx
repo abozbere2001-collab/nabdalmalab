@@ -185,31 +185,33 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 </Button>
             )}
 
-            <div ref={scrollerRef} className="flex-1 flex flex-row-reverse overflow-x-auto pb-1 px-10" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                {dates.map(date => {
-                    const dateKey = formatDateKey(date);
-                    const isSelected = dateKey === selectedDateKey;
-                    const dayLabel = isToday(date) ? "اليوم" : isYesterday(date) ? "الأمس" : isTomorrow(date) ? "غداً" : format(date, "EEE", { locale: ar });
+            <ScrollArea dir="rtl" className="w-full h-full" scrollbarClassName="h-0 p-0">
+                <div ref={scrollerRef} className="flex flex-row-reverse items-center h-full px-10">
+                    {dates.map(date => {
+                        const dateKey = formatDateKey(date);
+                        const isSelected = dateKey === selectedDateKey;
+                        const dayLabel = isToday(date) ? "اليوم" : isYesterday(date) ? "الأمس" : isTomorrow(date) ? "غداً" : format(date, "EEE", { locale: ar });
 
-                    return (
-                         <button
-                            key={dateKey}
-                            ref={isSelected ? selectedButtonRef : null}
-                             className={cn(
-                                "relative flex items-center justify-center h-full px-3 min-w-[50px] rounded-lg transition-colors ml-2",
-                                "text-[var(--date-scroller-foreground)] hover:bg-white/20",
-                                isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
-                            )}
-                            onClick={() => onDateSelect(dateKey)}
-                        >
-                           <span className="text-[11px] font-semibold flex items-center gap-1.5">
-                                <span className="font-normal">{dayLabel}</span>
-                                <span>{format(date, 'd')}</span>
-                            </span>
-                        </button>
-                    )
-                })}
-            </div>
+                        return (
+                             <button
+                                key={dateKey}
+                                ref={isSelected ? selectedButtonRef : null}
+                                 className={cn(
+                                    "relative flex items-center justify-center h-full px-3 min-w-[50px] rounded-lg transition-colors ml-2",
+                                    "text-[var(--date-scroller-foreground)] hover:bg-white/20",
+                                    isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
+                                )}
+                                onClick={() => onDateSelect(dateKey)}
+                            >
+                               <span className="text-[11px] font-semibold flex items-center gap-1.5">
+                                    <span className="font-normal">{dayLabel}</span>
+                                    <span>{format(date, 'd')}</span>
+                                </span>
+                            </button>
+                        )
+                    })}
+                </div>
+            </ScrollArea>
              <Button 
                 variant="ghost" 
                 size="icon"
