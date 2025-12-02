@@ -32,6 +32,8 @@ import {Skeleton} from "@/components/ui/skeleton";
 import { setLocalFavorites } from '@/lib/local-favorites';
 import { hardcodedTranslations } from '@/lib/hardcoded-translations';
 
+const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
 
 const CrownedTeamScroller = ({
   crownedTeams,
@@ -102,8 +104,8 @@ const TeamFixturesDisplay = ({ teamId, navigate }: { teamId: number; navigate: S
             };
             setLoading(true);
             try {
-                const url = `/api/football/fixtures?team=${teamId}&season=${CURRENT_SEASON}`;
-                const res = await fetch(url);
+                const url = `https://${API_FOOTBALL_HOST}/fixtures?team=${teamId}&season=${CURRENT_SEASON}`;
+                const res = await fetch(url, { headers: { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY } });
                 if (!isMounted) return;
                 if (!res.ok) throw new Error(`API fetch failed with status: ${res.status}`);
                 

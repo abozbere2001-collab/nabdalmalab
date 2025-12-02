@@ -29,6 +29,9 @@ import { Button } from '@/components/ui/button';
 import { hardcodedTranslations } from '@/lib/hardcoded-translations';
 import { isMatchLive } from '@/lib/matchStatus';
 
+const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+
 // This is a temporary fallback. In a real app, you would use a proper i18n library.
 const useTranslation = () => ({ t: (key: string) => key.replace(/_/g, ' ') });
 
@@ -649,14 +652,20 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
             if (!fixtureId) return;
             setLoadingFixture(true);
             try {
-                const response = await fetch(`/api/football/fixtures?id=${fixtureId}`, { signal });
+                const response = await fetch(`https://${API_FOOTBALL_HOST}/fixtures?id=${fixtureId}`, { 
+                    signal,
+                    headers: { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY } 
+                });
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
 
                 if (signal.aborted) return;
                 setFixture(data.response[0] || null);
             } catch (error) {
-                if (!signal.aborted) console.error("Could not fetch fixture:", error);
+                if (!signal.aborted) {
+                    console.error("Could not fetch fixture:", error);
+                    toast({ variant: 'destructive', title: 'خطأ', description: `فشل تحميل بيانات المباراة. ${error instanceof Error ? error.message : ''}` });
+                }
             } finally {
                 if (!signal.aborted) setLoadingFixture(false);
             }
@@ -664,7 +673,7 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
 
         fetchInitialFixture();
         return () => controller.abort();
-    }, [fixtureId]);
+    }, [fixtureId, toast]);
     
     useEffect(() => {
         if (!fixture || !db) return;
@@ -678,6 +687,7 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
             try {
                 await fetchAllCustomNames();
 
+                const headers = { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY };
                 const fetchTeamPlayers = async (teamId: number, season: number) => {
                     const allPlayersForTeam: { player: PlayerType, statistics: any[] }[] = [];
                     let currentPage = 1;
@@ -685,7 +695,7 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
 
                     while (currentPage <= totalPages) {
                         try {
-                            const res = await fetch(`/api/football/players?team=${teamId}&season=${season}&page=${currentPage}`, { signal });
+                            const res = await fetch(`https://${API_FOOTBALL_HOST}/players?team=${teamId}&season=${season}&page=${currentPage}`, { signal, headers });
                             if (signal.aborted) return [];
                             if (res.ok) {
                                 const data = await res.json();
@@ -705,9 +715,9 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
                 };
                 
                 const [lineupsRes, eventsRes, statsRes, homePlayersData, awayPlayersData] = await Promise.all([
-                    fetch(`/api/football/lineups?fixture=${fixture.fixture.id}`, { signal }),
-                    fetch(`/api/football/events?fixture=${fixture.fixture.id}`, { signal }),
-                    fetch(`/api/football/statistics?fixture=${fixture.fixture.id}`, { signal }),
+                    fetch(`https://${API_FOOTBALL_HOST}/lineups?fixture=${fixture.fixture.id}`, { signal, headers }),
+                    fetch(`https://${API_FOOTBALL_HOST}/events?fixture=${fixture.fixture.id}`, { signal, headers }),
+                    fetch(`https://${API_FOOTBALL_HOST}/statistics?fixture=${fixture.fixture.id}`, { signal, headers }),
                     fetchTeamPlayers(fixture.teams.home.id, fixture.league.season),
                     fetchTeamPlayers(fixture.teams.away.id, fixture.league.season),
                 ]);
@@ -744,7 +754,10 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
         const fetchStandings = async () => {
             setLoadingStandings(true);
             try {
-                const response = await fetch(`/api/football/standings?league=${fixture.league.id}&season=${fixture.league.season}`, { signal });
+                const response = await fetch(`https://${API_FOOTBALL_HOST}/standings?league=${fixture.league.id}&season=${fixture.league.season}`, { 
+                    signal,
+                    headers: { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY }
+                 });
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
                 if (signal.aborted) return;

@@ -13,6 +13,9 @@ import { LiveMatchStatus } from './LiveMatchStatus';
 import { Loader2 } from 'lucide-react';
 import { PredictionOdds } from './PredictionOdds';
 
+const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
+const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
+
 const PredictionCard = ({
   predictionMatch,
   userPrediction,
@@ -54,7 +57,7 @@ const PredictionCard = ({
     const fetchLiveFixture = async () => {
       setIsUpdating(true);
       try {
-        const res = await fetch(`/api/football/fixtures?id=${liveFixture.fixture.id}`);
+        const res = await fetch(`https://${API_FOOTBALL_HOST}/fixtures?id=${liveFixture.fixture.id}`, { headers: { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY } });
         const data = await res.json();
         if (data.response && data.response.length > 0) {
           setLiveFixture(data.response[0]);

@@ -161,5 +161,3 @@ export function MatchOddsPopover({ fixtureId }: { fixtureId: number }) {
         </Popover>
     );
 }
-
-    

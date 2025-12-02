@@ -20,6 +20,7 @@ import { FootballIcon } from '@/components/icons/FootballIcon';
 import { FixedSizeList as List } from 'react-window';
 import { hardcodedTranslations } from '@/lib/hardcoded-translations';
 
+const API_FOOTBALL_HOST = 'v3.football.api-sports.io';
 const API_KEY = "d3d0510e975b2b9754dd4ae29b76c99a";
 
 interface SeasonPlayerSelectionScreenProps extends ScreenProps {
@@ -83,7 +84,7 @@ export function SeasonPlayerSelectionScreen({ navigate, goBack, canGoBack, heade
 
             try {
                 while (currentPage <= totalPages) {
-                    const res = await fetch(`/api/football/players?team=${teamId}&season=${CURRENT_SEASON}&page=${currentPage}`);
+                    const res = await fetch(`https://${API_FOOTBALL_HOST}/players?team=${teamId}&season=${CURRENT_SEASON}&page=${currentPage}`, { headers: { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY } });
                     const data = await res.json();
                     
                     if (data.response) {
