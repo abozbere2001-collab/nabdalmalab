@@ -52,6 +52,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { OnboardingHints } from '@/components/OnboardingHints';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { errorEmitter } from '@/firebase/error-emitter';
+import { AdminDashboardScreen } from './screens/AdminDashboardScreen';
 
 const screenConfig: Record<string, { component: React.ComponentType<any>;}> = {
   Matches: { component: MatchesScreen },
@@ -78,6 +79,7 @@ const screenConfig: Record<string, { component: React.ComponentType<any>;}> = {
   ManageTopScorers: { component: ManageTopScorersScreen },
   MyCountry: { component: IraqScreen },
   Predictions: { component: PredictionsScreen },
+  AdminDashboard: { component: AdminDashboardScreen },
 };
 
 

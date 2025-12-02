@@ -22,15 +22,22 @@ import {
 } from "@/components/ui/alert-dialog"
 import { SearchSheet } from '@/components/SearchSheet';
 import { ProfileButton } from '../AppContentWrapper';
+import { useAdmin } from '@/firebase';
+import { AdminIcon } from '@/components/icons/AdminIcon';
 
 export function SettingsScreen({ navigate, goBack, canGoBack, favorites, customNames, setFavorites }: ScreenProps & {setFavorites: (favorites: any) => void}) {
   const { toast } = useToast();
+  const { isAdmin } = useAdmin();
   
   const mainSettingsItems = [
       { label: "الملف الشخصي", icon: User, action: (navigate: ScreenProps['navigate']) => navigate('Profile') },
       { label: "كل البطولات", icon: Trophy, action: (navigate: ScreenProps['navigate']) => navigate('AllCompetitions') },
       { label: "الإعدادات العامة", icon: SettingsIcon, action: (navigate: ScreenProps['navigate']) => navigate('GeneralSettings')},
   ];
+
+  if (isAdmin) {
+    mainSettingsItems.push({ label: "لوحة التحكم", icon: AdminIcon, action: (navigate: ScreenProps['navigate']) => navigate('AdminDashboard')});
+  }
 
   const legalSettingsItems = [
       { label: "سياسة الخصوصية", icon: FileBadge, action: (navigate: ScreenProps['navigate']) => navigate('PrivacyPolicy') },
