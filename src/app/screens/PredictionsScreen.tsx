@@ -157,7 +157,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             const scrollerRect = scroller.getBoundingClientRect();
             const selectedRect = selectedButton.getBoundingClientRect();
             const scrollOffset = (selectedRect.left - scrollerRect.left) - (scrollerRect.width / 2) + (selectedRect.width / 2);
-            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'auto' });
+            scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
         }
     }, [selectedDateKey]);
 
