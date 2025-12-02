@@ -219,14 +219,16 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                             key={dateKey}
                             ref={isSelected ? selectedButtonRef : null}
                             className={cn(
-                                "relative flex flex-col items-center justify-center h-auto py-0 px-2 min-w-[38px] rounded-lg transition-colors ml-2",
+                                "relative flex items-center justify-center h-full px-3 min-w-[50px] rounded-lg transition-colors ml-2",
                                 "text-[var(--date-scroller-foreground)] hover:bg-white/20",
                                 isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
                             )}
                             onClick={() => onDateSelect(dateKey)}
                         >
-                            <span className="text-[9px] font-normal">{dayLabel}</span>
-                            <span className="font-semibold text-xs">{format(date, 'd')}</span>
+                           <span className="text-[11px] font-semibold flex items-center gap-1.5">
+                                <span className="font-normal">{dayLabel}</span>
+                                <span>{format(date, 'd')}</span>
+                            </span>
                         </button>
                     )
                 })}
@@ -482,5 +484,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
+    
 
     

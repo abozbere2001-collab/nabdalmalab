@@ -8,7 +8,7 @@ import { ScreenHeader } from '@/components/ScreenHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProfileButton } from '../AppContentWrapper';
 import { Button } from '@/components/ui/button';
-import { Crown, Search, X, Loader2, Trophy, BarChart, Users as UsersIcon, RefreshCw, CalendarDays, ThumbsUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Crown, Search, X, Loader2, Trophy, BarChart, Users as UsersIcon, RefreshCw, CalendarDays, ThumbsUp, ChevronLeft, ChevronRight, CalendarClock } from 'lucide-react';
 import { SearchSheet } from '@/components/SearchSheet';
 import { useAdmin, useAuth, useFirestore } from '@/firebase';
 import type { CrownedTeam, Favorites, Fixture, Standing, TopScorer, Prediction, Team, Player, UserScore, PredictionMatch, UserProfile } from '@/lib/types';
@@ -195,15 +195,17 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                          <button
                             key={dateKey}
                             ref={isSelected ? selectedButtonRef : null}
-                            className={cn(
-                                "relative flex flex-col items-center justify-center h-auto py-0 px-2 min-w-[38px] rounded-lg transition-colors ml-2",
+                             className={cn(
+                                "relative flex items-center justify-center h-full px-3 min-w-[50px] rounded-lg transition-colors ml-2",
                                 "text-[var(--date-scroller-foreground)] hover:bg-white/20",
                                 isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
                             )}
                             onClick={() => onDateSelect(dateKey)}
                         >
-                            <span className="text-[9px] font-normal">{dayLabel}</span>
-                            <span className="font-semibold text-xs">{format(date, 'd')}</span>
+                           <span className="text-[11px] font-semibold flex items-center gap-1.5">
+                                <span className="font-normal">{dayLabel}</span>
+                                <span>{format(date, 'd')}</span>
+                            </span>
                         </button>
                     )
                 })}
@@ -580,5 +582,7 @@ export function PredictionsScreen({ navigate, goBack, canGoBack, favorites, cust
         </div>
     );
 }
+
+    
 
     
