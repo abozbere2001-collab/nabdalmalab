@@ -51,7 +51,7 @@ export function BottomNav({ activeScreen, onNavigate }: BottomNavProps) {
                 )}>
                     <Icon className="h-5 w-5" />
                 </div>
-              <span className={cn(isActive ? "font-bold" : "font-medium")}>{label}</span>
+              <span className={cn("text-[10px]", isActive ? "font-bold" : "font-medium")}>{label}</span>
             </button>
           );
         })}
