@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
@@ -185,7 +184,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 </Button>
             )}
 
-            <ScrollArea dir="rtl" className="w-full h-full" scrollbarClassName="h-0 p-0">
+            <ScrollArea dir="rtl" className="w-full h-full">
                 <div ref={scrollerRef} className="flex flex-row-reverse items-center h-full px-10">
                     {dates.map(date => {
                         const dateKey = formatDateKey(date);
@@ -211,6 +210,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                         )
                     })}
                 </div>
+                 <ScrollBar orientation="horizontal" className="h-0 p-0" />
             </ScrollArea>
              <Button 
                 variant="ghost" 
@@ -584,11 +584,3 @@ export function PredictionsScreen({ navigate, goBack, canGoBack, favorites, cust
         </div>
     );
 }
-
-    
-
-    
-
-    
-
-    
