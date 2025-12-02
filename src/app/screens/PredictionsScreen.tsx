@@ -147,6 +147,8 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     
     const scrollerRef = useRef<HTMLDivElement>(null);
     const selectedButtonRef = useRef<HTMLButtonElement>(null);
+    const isTodaySelected = selectedDateKey === formatDateKey(new Date());
+
 
     useEffect(() => {
         const scroller = scrollerRef.current;
@@ -161,32 +163,47 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     }, [selectedDateKey]);
 
     return (
-        <div className="relative bg-date-scroller-background py-2 shadow-md flex items-center justify-center">
+        <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[30px] flex items-center justify-center">
              <Button 
                 variant="ghost" 
                 size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
                 onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
              >
                 <ChevronRight className="h-5 w-5" />
              </Button>
-            <div ref={scrollerRef} className="flex flex-row-reverse overflow-x-auto pb-1 px-10" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+
+            {!isTodaySelected && (
+                <Button 
+                    variant="secondary"
+                    size="sm"
+                    className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-6 rounded-full z-20 bg-background/80 text-foreground border border-border backdrop-blur-sm animate-in fade-in zoom-in-95 px-2"
+                    onClick={() => onDateSelect(formatDateKey(new Date()))}
+                >
+                    <CalendarClock className="h-3 w-3 ml-1" />
+                    <span className="text-xs">اليوم</span>
+                </Button>
+            )}
+
+            <div ref={scrollerRef} className="flex-1 flex flex-row-reverse overflow-x-auto pb-1 px-10" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 {dates.map(date => {
                     const dateKey = formatDateKey(date);
                     const isSelected = dateKey === selectedDateKey;
+                    const dayLabel = isToday(date) ? "اليوم" : isYesterday(date) ? "الأمس" : isTomorrow(date) ? "غداً" : format(date, "EEE", { locale: ar });
+
                     return (
                          <button
                             key={dateKey}
                             ref={isSelected ? selectedButtonRef : null}
                             className={cn(
-                                "relative flex flex-col items-center justify-center h-auto py-1 px-2 min-w-[40px] rounded-lg transition-colors ml-2",
-                                "text-date-scroller-foreground hover:bg-white/20",
-                                isSelected && "text-date-scroller-active-foreground bg-date-scroller-active-background"
+                                "relative flex flex-col items-center justify-center h-auto py-0 px-2 min-w-[38px] rounded-lg transition-colors ml-2",
+                                "text-[var(--date-scroller-foreground)] hover:bg-white/20",
+                                isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
                             )}
                             onClick={() => onDateSelect(dateKey)}
                         >
-                            <span className="text-[10px] font-normal">{format(date, "EEE", { locale: ar })}</span>
-                            <span className="font-semibold text-sm">{format(date, 'd')}</span>
+                            <span className="text-[9px] font-normal">{dayLabel}</span>
+                            <span className="font-semibold text-xs">{format(date, 'd')}</span>
                         </button>
                     )
                 })}
@@ -194,7 +211,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
              <Button 
                 variant="ghost" 
                 size="icon"
-                className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20"
+                className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
                 onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
              >
                 <ChevronLeft className="h-5 w-5" />
@@ -563,3 +580,5 @@ export function PredictionsScreen({ navigate, goBack, canGoBack, favorites, cust
         </div>
     );
 }
+
+    
