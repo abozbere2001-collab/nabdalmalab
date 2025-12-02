@@ -147,6 +147,8 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     const scrollerRef = useRef<HTMLDivElement>(null);
     const selectedButtonRef = useRef<HTMLButtonElement>(null);
 
+    const isTodaySelected = isToday(new Date(selectedDateKey));
+
      useLayoutEffect(() => {
         const scroller = scrollerRef.current;
         const selectedButton = selectedButtonRef.current;
@@ -161,7 +163,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
 
              return () => clearTimeout(timeoutId);
         }
-    }, [selectedDateKey]);
+    }, [selectedDateKey, isTodaySelected]);
 
     return (
         <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[44px] flex items-center justify-center">
@@ -174,7 +176,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                 <ChevronLeft className="h-5 w-5" />
              </Button>
 
-            {!isToday(new Date(selectedDateKey)) && (
+            {!isTodaySelected && (
                 <Button 
                     variant="secondary"
                     size="sm"
@@ -204,7 +206,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isSelected ? selectedButtonRef : null}
                                  className={cn(
-                                    "relative flex items-center justify-center h-full px-3 min-w-[70px] rounded-lg transition-colors ml-2",
+                                    "relative flex items-center justify-center px-3 min-w-[70px] h-9 rounded-lg transition-colors ml-2",
                                     "text-[var(--date-scroller-foreground)] hover:bg-white/20",
                                     isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
                                 )}
