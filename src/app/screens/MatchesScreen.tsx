@@ -191,7 +191,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
 
             return () => clearTimeout(timeoutId);
         }
-    }, [selectedDateKey, isTodaySelected]);
+    }, [selectedDateKey]);
 
     return (
         <div className="relative bg-[var(--date-scroller-background)] shadow-md h-[44px] flex items-center justify-center">
@@ -234,15 +234,16 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isSelected ? selectedButtonRef : null}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center px-3 min-w-[70px] h-[44px] transition-colors",
-                                    "text-[var(--date-scroller-foreground)] hover:bg-black/10 rounded-lg"
+                                    "relative flex flex-col items-center justify-center px-3 min-w-[70px] h-[44px] transition-colors text-[var(--date-scroller-foreground)] hover:bg-black/10 rounded-lg"
                                 )}
                                 onClick={() => onDateSelect(dateKey)}
                             >
-                                <div className={cn(
-                                    "absolute inset-0 flex flex-col items-center justify-center rounded-full transition-all duration-200",
-                                    isSelected ? "bg-[var(--date-scroller-active-background)] text-[var(--date-scroller-active-foreground)]" : "bg-transparent"
-                                )}>
+                                <div
+                                    className={cn(
+                                        "w-full h-full flex flex-row items-center justify-center gap-1.5 rounded-full transition-colors duration-200",
+                                        isSelected && "bg-[var(--date-scroller-active-background)] text-[var(--date-scroller-active-foreground)]"
+                                    )}
+                                >
                                     <span className="text-[11px] font-semibold">{dayLabel}</span>
                                     <span className="font-bold text-sm">{format(date, 'd')}</span>
                                 </div>
@@ -503,4 +504,5 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
     </div>
   );
 }
+
 
