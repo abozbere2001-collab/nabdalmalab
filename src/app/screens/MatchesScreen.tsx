@@ -173,7 +173,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     useEffect(() => {
         if (todayRef.current && scrollerRef.current) {
             // The magic line that centers the element
-            todayRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            todayRef.current.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
         }
     }, []); // Empty dependency array ensures this runs only once on mount
 
