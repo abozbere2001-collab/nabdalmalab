@@ -179,7 +179,8 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             const scrollerRect = scroller.getBoundingClientRect();
             const selectedRect = selectedButton.getBoundingClientRect();
             
-            const scrollOffset = (selectedRect.right - scrollerRect.right) + (scrollerRect.width / 2) - (selectedRect.width / 2);
+            // For RTL, the logic is slightly different
+            const scrollOffset = (selectedRect.left - scrollerRect.left) - (scrollerRect.width / 2) + (selectedRect.width / 2);
             scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
         }
     }, [selectedDateKey]);
@@ -189,10 +190,10 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
              <Button 
                 variant="ghost" 
                 size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
-                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
+                className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
+                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
              >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronLeft className="h-5 w-5" />
              </Button>
 
             {!isTodaySelected && (
@@ -208,7 +209,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
             )}
 
             <ScrollArea dir="rtl" className="w-full h-full">
-                <div ref={scrollerRef} className="flex flex-row-reverse items-center h-full px-10">
+                <div ref={scrollerRef} className="flex flex-row items-center h-full px-10">
                     {dates.map(date => {
                         const dateKey = formatDateKey(date);
                         const isSelected = dateKey === selectedDateKey;
@@ -244,10 +245,10 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
              <Button 
                 variant="ghost" 
                 size="icon"
-                className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
-                onClick={() => onDateSelect(formatDateKey(addDays(new Date(selectedDateKey), 1)))}
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/20 text-[var(--date-scroller-foreground)]"
+                onClick={() => onDateSelect(formatDateKey(subDays(new Date(selectedDateKey), 1)))}
              >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronRight className="h-5 w-5" />
              </Button>
         </div>
     );
