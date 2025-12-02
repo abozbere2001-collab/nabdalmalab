@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
@@ -9,7 +10,7 @@ import { format, addDays, subDays, isToday, isYesterday, isTomorrow, startOfToda
 import { ar } from 'date-fns/locale';
 import { useAdmin, useAuth, useFirestore } from '@/firebase/provider';
 import { doc, onSnapshot, collection, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
-import { Loader2, Search, Star, Crown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, Search, Star, Crown, ChevronLeft, ChevronRight, CalendarClock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { errorEmitter } from '@/firebase/error-emitter';
@@ -168,6 +169,8 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
     
     const scrollerRef = useRef<HTMLDivElement>(null);
     const selectedButtonRef = useRef<HTMLButtonElement>(null);
+    const isTodaySelected = selectedDateKey === formatDateKey(new Date());
+
 
     useEffect(() => {
         const scroller = scrollerRef.current;
@@ -192,6 +195,19 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
              >
                 <ChevronRight className="h-5 w-5" />
              </Button>
+
+            {!isTodaySelected && (
+                <Button 
+                    variant="secondary"
+                    size="sm"
+                    className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-7 rounded-full z-20 bg-background/80 text-foreground border border-border backdrop-blur-sm animate-in fade-in zoom-in-95"
+                    onClick={() => onDateSelect(formatDateKey(new Date()))}
+                >
+                    <CalendarClock className="h-4 w-4 ml-1" />
+                    العودة لليوم
+                </Button>
+            )}
+
             <div ref={scrollerRef} className="flex-1 flex flex-row-reverse overflow-x-auto pb-1 px-10" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 {dates.map(date => {
                     const dateKey = formatDateKey(date);
