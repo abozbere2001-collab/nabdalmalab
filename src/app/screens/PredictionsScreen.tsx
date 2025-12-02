@@ -156,7 +156,13 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
         if (scroller && selectedButton) {
             const scrollerRect = scroller.getBoundingClientRect();
             const selectedRect = selectedButton.getBoundingClientRect();
-            const scrollOffset = selectedRect.left - scrollerRect.left - (scrollerRect.width / 2) + (selectedRect.width / 2);
+            // Calculation for RTL:
+            // The goal is to center the selected button.
+            // selectedRect.right is the distance from the viewport's left edge to the button's right edge.
+            // scrollerRect.right is the distance from the viewport's left edge to the scroller's right edge.
+            // Difference gives the button's position relative to the scroller's right edge.
+            // We then adjust by half the scroller width and half the button width to center it.
+            const scrollOffset = (selectedRect.right - scrollerRect.right) + (scrollerRect.width / 2) - (selectedRect.width / 2);
             scroller.scrollTo({ left: scroller.scrollLeft + scrollOffset, behavior: 'smooth' });
         }
     }, [selectedDateKey]);
@@ -202,7 +208,7 @@ const DateScroller = ({ selectedDateKey, onDateSelect }: {selectedDateKey: strin
                                 key={dateKey}
                                 ref={isSelected ? selectedButtonRef : null}
                                  className={cn(
-                                    "relative flex items-center justify-center h-full px-3 min-w-[50px] rounded-lg transition-colors ml-2",
+                                    "relative flex items-center justify-center h-full px-3 min-w-[70px] rounded-lg transition-colors ml-2",
                                     "text-[var(--date-scroller-foreground)] hover:bg-white/20",
                                     isSelected && "text-[var(--date-scroller-active-foreground)] bg-[var(--date-scroller-active-background)]"
                                 )}
