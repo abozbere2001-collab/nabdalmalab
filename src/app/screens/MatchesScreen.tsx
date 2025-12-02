@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
@@ -420,7 +419,7 @@ export function MatchesScreen({ navigate, goBack, canGoBack, isVisible, favorite
                   >
                     <span className="text-xs font-mono select-none">1x2</span>
                   </div>
-                  <SearchSheet navigate={navigate} favorites={favorites} customNames={customNames} setFavorites={setFavorites} onCustomNameChange={onCustomNameChange}>
+                  <SearchSheet navigate={navigate} favorites={favorites} customNames={customNames} setFavorites={setFavorites} onCustomNameChange={onCustomNameChange!}>
                       <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/20">
                           <Search className="h-5 w-5" />
                       </Button>

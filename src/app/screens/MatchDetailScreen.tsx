@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { ScreenProps } from '@/app/page';
@@ -947,5 +947,3 @@ export default function MatchDetailScreen({ goBack, canGoBack, fixtureId, naviga
       </div>
     );
 }
-
-    

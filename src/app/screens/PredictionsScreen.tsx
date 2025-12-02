@@ -374,7 +374,11 @@ export function PredictionsScreen({ navigate, goBack, canGoBack, favorites, cust
                 return;
             }
 
-            const apiFixturePromises = fixtureIds.map(id => fetch(`https://${API_FOOTBALL_HOST}/fixtures?id=${id}`, { headers: { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY } }).then(res => res.json()));
+            const apiFixturePromises = fixtureIds.map(id => 
+                fetch(`https://${API_FOOTBALL_HOST}/fixtures?id=${id}`, { 
+                    headers: { 'x-rapidapi-host': API_FOOTBALL_HOST, 'x-rapidapi-key': API_KEY } 
+                }).then(res => res.ok ? res.json() : Promise.reject(new Error(`API Error: ${res.statusText}`)))
+            );
             const apiFixtureResults = await Promise.all(apiFixturePromises);
             
             const liveFixturesMap = new Map<number, Fixture>();
